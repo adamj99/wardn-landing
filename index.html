@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>wardn — Self-hosted operations intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;
+  --bg:#f6f3ee; --bg-elev:#fbf9f5; --bg-card:#fff; --bg-sunken:#efeae2;
+  --ink:#0e0d0b; --ink-2:#3a3631; --line:#e8e1d4; --line-strong:#d6cdb8;
+  --text:#1c1a16; --text-2:#4a4640; --text-3:#837d72; --text-4:#b3aca0;
+  --accent:#5a4ee8; --accent-2:#3f34c4; --accent-soft:#ece9fc;
+  --ok:#1f7a4d; --warn:#b46a16; --bad:#b8341d;
+  --r:14px; --r-sm:9px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:var(--font-sans); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased; font-feature-settings:"ss01","cv11";
+}
+a{color:inherit; text-decoration:none;}
+.mono{font-family:var(--font-mono);}
+.wrap{max-width:1160px; margin:0 auto; padding:0 28px;}
+.eyebrow{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent); font-weight:600;
+}
+
+/* ---- buttons ---- */
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:11px 18px; border-radius:10px; font-size:14.5px; font-weight:600;
+  border:1px solid transparent; cursor:pointer; transition:transform .12s, background .15s, border-color .15s;
+  white-space:nowrap;
+}
+.btn:hover{transform:translateY(-1px);}
+.btn-primary{background:var(--ink); color:#f6f3ee;}
+.btn-primary:hover{background:var(--accent);}
+.btn-ghost{border-color:var(--line-strong); color:var(--text); background:var(--bg-card);}
+.btn-ghost:hover{border-color:var(--ink); background:var(--bg-elev);}
+.btn-lg{padding:14px 24px; font-size:15.5px; border-radius:12px;}
+.arrow{transition:transform .15s;}
+.btn:hover .arrow{transform:translateX(3px);}
+
+/* ---- nav ---- */
+header.nav{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in oklab, var(--bg) 80%, transparent);
+  backdrop-filter:blur(12px); border-bottom:1px solid transparent;
+  transition:border-color .2s;
+}
+header.nav.scrolled{border-bottom-color:var(--line);}
+.nav-inner{display:flex; align-items:center; gap:28px; height:66px;}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:17px; letter-spacing:-.01em;}
+.brand .logo{
+  width:30px; height:30px; border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),oklch(.62 .16 200));
+  display:grid; place-items:center; color:#fff; font-weight:700; font-size:15px;
+}
+.nav-links{display:flex; gap:24px; margin-left:8px;}
+.nav-links a{font-size:14px; color:var(--text-2); font-weight:500;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{margin-left:auto; display:flex; gap:10px; align-items:center;}
+.nav-pill{
+  display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono);
+  font-size:11.5px; color:var(--text-2); padding:5px 11px; border-radius:99px;
+  border:1px solid var(--line-strong); background:var(--bg-card);
+}
+.nav-pill .dot{width:6px; height:6px; border-radius:99px; background:var(--ok);
+  box-shadow:0 0 0 0 rgba(31,122,77,.5); animation:pulse 2.4s infinite;}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(31,122,77,.4);}70%{box-shadow:0 0 0 6px rgba(31,122,77,0);}100%{box-shadow:0 0 0 0 rgba(31,122,77,0);}}
+
+/* ---- hero ---- */
+.hero{padding:84px 0 56px; position:relative; overflow:hidden;}
+.hero::before{
+  content:""; position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(60% 50% at 78% 8%, color-mix(in oklab, var(--accent) 13%, transparent), transparent 70%),
+    radial-gradient(45% 40% at 8% 0%, color-mix(in oklab, oklch(.62 .16 200) 10%, transparent), transparent 70%);
+  pointer-events:none;
+}
+.hero .wrap{position:relative; z-index:1;}
+.hero h1{
+  font-size:clamp(40px,6vw,68px); line-height:1.04; letter-spacing:-.03em;
+  font-weight:700; margin:20px 0 0; max-width:16ch; text-wrap:balance;
+}
+.hero h1 .grad{
+  background:linear-gradient(120deg,var(--accent),oklch(.6 .17 250));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero .sub{
+  font-size:clamp(17px,2vw,20px); color:var(--text-2); margin:24px 0 0;
+  max-width:56ch; line-height:1.55;
+}
+.hero-cta{display:flex; gap:12px; margin-top:34px; flex-wrap:wrap; align-items:center;}
+.hero-note{font-family:var(--font-mono); font-size:12.5px; color:var(--text-3); display:flex; align-items:center; gap:8px;}
+.hero-meta{display:flex; gap:28px; margin-top:46px; flex-wrap:wrap;}
+.hero-meta .stat .n{font-size:26px; font-weight:700; letter-spacing:-.02em;}
+.hero-meta .stat .l{font-family:var(--font-mono); font-size:11.5px; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em; margin-top:1px;}
+
+/* ---- product frame ---- */
+.product{margin-top:60px; position:relative; z-index:1;}
+.frame{
+  border:1px solid var(--line-strong); border-radius:18px; overflow:hidden;
+  background:var(--bg-card); box-shadow:0 30px 70px -30px rgba(28,26,22,.35), 0 8px 24px -12px rgba(28,26,22,.14);
+  position:relative;
+}
+.frame-bar{
+  display:flex; align-items:center; gap:8px; padding:11px 16px;
+  background:var(--bg-elev); border-bottom:1px solid var(--line);
+}
+.frame-bar .tl{display:flex; gap:6px;}
+.frame-bar .tl i{width:11px; height:11px; border-radius:99px; background:var(--line-strong); display:block;}
+.frame-bar .addr{
+  margin-left:10px; font-family:var(--font-mono); font-size:12px; color:var(--text-3);
+  background:var(--bg-card); border:1px solid var(--line); border-radius:7px;
+  padding:4px 12px; flex:1; max-width:360px;
+}
+.frame-bar .live-tag{margin-left:auto; font-family:var(--font-mono); font-size:11px; color:var(--accent); font-weight:600; display:flex; align-items:center; gap:6px;}
+.frame-shot{display:block; width:100%; height:auto;}
+.frame-fallback{padding:0;}
+.frame-overlay{
+  position:absolute; inset:0; display:grid; place-items:center;
+  background:linear-gradient(180deg, transparent 55%, color-mix(in oklab, var(--ink) 30%, transparent));
+  opacity:0; transition:opacity .2s;
+}
+.frame:hover .frame-overlay{opacity:1;}
+.frame-overlay .btn{box-shadow:0 8px 30px -8px rgba(0,0,0,.4);}
+
+/* ---- section scaffold ---- */
+section{padding:74px 0;}
+.section-head{max-width:60ch;}
+.section-head h2{font-size:clamp(28px,3.6vw,40px); line-height:1.1; letter-spacing:-.025em; font-weight:700; margin:14px 0 0; text-wrap:balance;}
+.section-head p{font-size:17.5px; color:var(--text-2); margin:16px 0 0;}
+.center{margin-left:auto; margin-right:auto; text-align:center;}
+
+/* ---- benefits grid ---- */
+.benefits{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:46px;}
+.bcard{
+  background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r);
+  padding:26px 24px; transition:border-color .15s, transform .15s, box-shadow .15s;
+}
+.bcard:hover{border-color:var(--line-strong); transform:translateY(-3px); box-shadow:0 16px 36px -22px rgba(28,26,22,.3);}
+.bcard .ico{
+  width:42px; height:42px; border-radius:11px; display:grid; place-items:center;
+  background:var(--accent-soft); color:var(--accent); margin-bottom:16px;
+}
+.bcard h3{font-size:18px; margin:0 0 8px; letter-spacing:-.01em; font-weight:650;}
+.bcard p{font-size:14.5px; color:var(--text-2); margin:0; line-height:1.55;}
+
+/* ---- self-hosted band ---- */
+.band{background:var(--ink); color:#ece9e2; border-radius:24px; padding:60px 56px; position:relative; overflow:hidden;}
+.band::before{content:""; position:absolute; inset:0;
+  background:radial-gradient(50% 60% at 88% 12%, color-mix(in oklab, var(--accent) 40%, transparent), transparent 65%); pointer-events:none;}
+.band-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:center; position:relative; z-index:1;}
+.band .eyebrow{color:oklch(.78 .12 280);}
+.band h2{font-size:clamp(28px,3.4vw,38px); letter-spacing:-.025em; line-height:1.1; margin:12px 0 0; color:#fff; font-weight:700; text-wrap:balance;}
+.band p{color:#bdb8b0; font-size:17px; margin:18px 0 0;}
+.band-list{list-style:none; padding:0; margin:6px 0 0; display:flex; flex-direction:column; gap:14px;}
+.band-list li{display:flex; gap:13px; align-items:flex-start; font-size:15px; color:#d8d4cc;}
+.band-list .chk{flex-shrink:0; width:22px; height:22px; border-radius:7px; background:color-mix(in oklab, var(--accent) 30%, transparent); color:#fff; display:grid; place-items:center; margin-top:1px;}
+.band-list b{color:#fff; font-weight:600;}
+
+/* ---- workflow / features ---- */
+.feat-row{display:grid; grid-template-columns:1fr 1fr; gap:54px; align-items:center; padding:30px 0;}
+.feat-row.rev{direction:rtl;} .feat-row.rev > *{direction:ltr;}
+.feat-copy h3{font-size:25px; letter-spacing:-.02em; margin:14px 0 0; font-weight:700;}
+.feat-copy p{color:var(--text-2); font-size:16px; margin:14px 0 0;}
+.feat-copy .mini{display:flex; flex-direction:column; gap:11px; margin-top:22px;}
+.feat-copy .mini div{display:flex; gap:10px; align-items:flex-start; font-size:14.5px; color:var(--text-2);}
+.feat-copy .mini .d{width:7px; height:7px; border-radius:99px; background:var(--accent); margin-top:8px; flex-shrink:0;}
+
+/* mini mock panels */
+.mock{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r); padding:18px; box-shadow:0 18px 40px -28px rgba(28,26,22,.35);}
+.mock-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+.mock-h .t{font-size:12px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.07em; color:var(--text-3); font-weight:600;}
+.chip{font-family:var(--font-mono); font-size:10.5px; padding:2px 8px; border-radius:99px; font-weight:600;}
+.chip.warn{background:var(--warn-bg); color:var(--warn);} .chip.ok{background:var(--ok-bg); color:var(--ok);} .chip.bad{background:var(--bad-bg); color:var(--bad);}
+.ins{display:flex; gap:11px; padding:12px; border:1px solid var(--line); border-radius:10px; margin-bottom:8px; background:var(--bg-elev);}
+.ins:last-child{margin-bottom:0;}
+.ins .bar{width:3px; border-radius:3px; flex-shrink:0;}
+.ins .body .hl{font-size:13.5px; font-weight:600;}
+.ins .body .mt{font-size:12px; color:var(--text-3); margin-top:2px;}
+.spark{display:flex; align-items:flex-end; gap:3px; height:42px; margin-top:6px;}
+.spark i{flex:1; background:var(--accent-soft); border-radius:2px 2px 0 0; display:block;}
+.spark i.hot{background:var(--accent);}
+.kv{display:grid; grid-template-columns:1fr auto; gap:8px 14px; font-size:13px;}
+.kv .k{color:var(--text-3); font-family:var(--font-mono); font-size:12px;}
+.kv .v{text-align:right; font-family:var(--font-mono); font-weight:600;}
+.kv .v.up{color:var(--ok);} .kv .v.dn{color:var(--bad);}
+
+/* ---- integrations ---- */
+.logos{display:flex; flex-wrap:wrap; gap:10px; margin-top:36px; justify-content:center;}
+.logo-chip{
+  display:inline-flex; align-items:center; gap:9px; padding:10px 16px; border-radius:11px;
+  border:1px solid var(--line); background:var(--bg-card); font-size:14px; font-weight:500; color:var(--text-2);
+}
+.logo-chip .g{width:22px; height:22px; border-radius:6px; display:grid; place-items:center; color:#fff; font-size:11px; font-weight:700; font-family:var(--font-mono);}
+
+/* ---- final CTA ---- */
+.final{text-align:center; padding:90px 0;}
+.final h2{font-size:clamp(32px,4.6vw,52px); letter-spacing:-.03em; line-height:1.06; font-weight:700; margin:0 auto; max-width:18ch; text-wrap:balance;}
+.final p{font-size:18px; color:var(--text-2); margin:20px auto 0; max-width:50ch;}
+.final .hero-cta{justify-content:center;}
+
+/* ---- footer ---- */
+footer{border-top:1px solid var(--line); padding:40px 0;}
+.foot-inner{display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+.foot-inner .brand{font-size:15px;}
+.foot-links{display:flex; gap:22px; margin-left:auto; flex-wrap:wrap;}
+.foot-links a{font-size:13.5px; color:var(--text-3);} .foot-links a:hover{color:var(--text);}
+.copyr{font-family:var(--font-mono); font-size:12px; color:var(--text-4); margin-top:18px;}
+
+@media (max-width:900px){
+  .benefits{grid-template-columns:1fr;}
+  .band-grid,.feat-row,.feat-row.rev{grid-template-columns:1fr; direction:ltr;}
+  .band{padding:40px 28px;}
+  .nav-links{display:none;}
+  .feat-row{gap:28px;}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><span class="logo">w</span> wardn</a>
+    <nav class="nav-links">
+      <a href="#benefits">Why wardn</a>
+      <a href="#selfhost">Self-hosted</a>
+      <a href="#features">Features</a>
+      <a href="#integrations">Integrations</a>
+    </nav>
+    <div class="nav-cta">
+      <span class="nav-pill"><span class="dot"></span> Runs in your VPC</span>
+      <a class="btn btn-ghost" href="mailto:sales@wardn.io?subject=wardn%20sales%20enquiry">Contact sales</a>
+      <a class="btn btn-primary" href="console.html">Live demo <span class="arrow">→</span></a>
+    </div>
+  </div>
+</header>
+
+<a id="top"></a>
+<section class="hero" style="padding-top:64px;">
+  <div class="wrap">
+    <span class="eyebrow">Self-hosted operations intelligence</span>
+    <h1>Your whole stack, <span class="grad">one calm console.</span></h1>
+    <p class="sub">wardn unifies monitoring, cost, deployments and incidents into a single anomaly-led workspace — with an AI assistant that already knows your infrastructure. Deployed entirely inside your own environment.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary btn-lg" href="console.html">Explore the live demo <span class="arrow">→</span></a>
+      <a class="btn btn-ghost btn-lg" href="#selfhost">How self-hosting works</a>
+      <span class="hero-note"><span class="mono">$</span> docker compose up — no data leaves your network</span>
+    </div>
+    <div class="hero-meta">
+      <div class="stat"><div class="n">100%</div><div class="l">Self-hosted</div></div>
+      <div class="stat"><div class="n">1 console</div><div class="l">Not 12 dashboards</div></div>
+      <div class="stat"><div class="n">&lt;12h</div><div class="l">Change surfaced</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">Data egress</div></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="benefits">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Why teams switch</span>
+      <h2>Stop stitching together a dozen tools</h2>
+      <p>Most ops teams live across Datadog, the cloud console, a deploy tool, a ticketing board and three Slack channels. wardn brings the signal into one place and tells you what changed.</p>
+    </div>
+    <div class="benefits">
+      <div class="bcard">
+        <div class="ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg>
+        </div>
+        <h3>Anomaly-led, not dashboard-led</h3>
+        <p>The console reorganizes itself around what's actually changing — incidents, regressions, cost drift and opportunities surface at the top so you're never hunting through charts.</p>
+      </div>
+      <div class="bcard">
+        <div class="ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18" opacity=".0"/><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+        </div>
+        <h3>One console, every signal</h3>
+        <p>Performance, cost, deployments and incidents in a single dense workspace with a shared timeline — compare across services side by side without switching tabs.</p>
+      </div>
+      <div class="bcard">
+        <div class="ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>
+        </div>
+        <h3>AI that knows your stack</h3>
+        <p>A built-in assistant with context on your services, metrics and history. Ask it to triage, draft a handover, or summarize the week — answers come with the data inline.</p>
+      </div>
+      <div class="bcard">
+        <div class="ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v6c0 5-4 8-8 8s-8-3-8-8V7z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <h3>Your data never leaves</h3>
+        <p>Runs entirely inside your VPC or on-prem. No metrics, logs or credentials are sent to a third-party SaaS — full data sovereignty by default.</p>
+      </div>
+      <div class="bcard">
+        <div class="ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2M4 7h16M4 7v12a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7M9 11h6"/></svg>
+        </div>
+        <h3>Automate the routine</h3>
+        <p>Scheduled briefings, digests and checks that post where your team already works. wardn even suggests new automations from the patterns it sees in your activity.</p>
+      </div>
+      <div class="bcard">
+        <div class="ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+        </div>
+        <h3>Cost as a first-class signal</h3>
+        <p>Spend sits next to performance, broken down by service with week-over-week deltas — so a cost spike is just another anomaly you catch early, not a month-end surprise.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="selfhost" style="padding-top:30px;">
+  <div class="wrap">
+    <div class="band">
+      <div class="band-grid">
+        <div>
+          <span class="eyebrow">Self-hosted by design</span>
+          <h2>Deploy it in your own environment in minutes</h2>
+          <p>wardn ships as a single container set you run wherever your infrastructure lives. Connect your existing tools over private networking — nothing is routed through us.</p>
+        </div>
+        <ul class="band-list">
+          <li><span class="chk"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span><div><b>Full data sovereignty.</b> Metrics, logs and secrets stay inside your perimeter — meet compliance and residency requirements out of the box.</div></li>
+          <li><span class="chk"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span><div><b>Bring your own models.</b> Point the AI assistant at your own LLM endpoint, a cloud provider, or a fully local model. No mandatory external calls.</div></li>
+          <li><span class="chk"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span><div><b>Connect what you already run.</b> Native MCP integrations for your observability, infra, ticketing and comms tools — connect once, use everywhere.</div></li>
+          <li><span class="chk"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span><div><b>You own the upgrade cadence.</b> Pin versions, run in air-gapped networks, and audit every change. No surprise SaaS updates.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Inside the console</span>
+      <h2>Built for the way on-call actually works</h2>
+    </div>
+
+    <div class="feat-row" style="margin-top:30px;">
+      <div class="feat-copy">
+        <span class="eyebrow">What changed</span>
+        <h3>The morning briefing, before you ask</h3>
+        <p>Every shift starts with a clear read on what moved overnight — auto-detected and ranked by impact, with one-click investigate and acknowledge. No more scanning twelve dashboards to find the one red line.</p>
+        <div class="mini">
+          <div><span class="d"></span> Incidents, regressions, cost drift and opportunities in one strip</div>
+          <div><span class="d"></span> Each item links straight to the underlying data</div>
+          <div><span class="d"></span> Ask the assistant to triage the whole list at once</div>
+        </div>
+      </div>
+      <div class="mock">
+        <div class="mock-h"><span class="t">What changed · last 12h</span><span class="chip warn">3 to review</span></div>
+        <div class="ins"><span class="bar" style="background:var(--bad);"></span><div class="body"><div class="hl">Service latency 2.4× weekly average</div><div class="mt">payments-api · since 08:22</div></div></div>
+        <div class="ins"><span class="bar" style="background:var(--warn);"></span><div class="body"><div class="hl">Spend drift +37% week-over-week</div><div class="mt">log ingestion · 3 days</div></div></div>
+        <div class="ins"><span class="bar" style="background:var(--accent);"></span><div class="body"><div class="hl">Traffic up 4× — scale opportunity</div><div class="mt">edge-gateway · 6h</div></div></div>
+      </div>
+    </div>
+
+    <div class="feat-row rev">
+      <div class="feat-copy">
+        <span class="eyebrow">Compare &amp; drill in</span>
+        <h3>Side-by-side, then all the way down</h3>
+        <p>Pin any set of services and compare their performance, cost and reliability at a glance. Click into any one for a full drill-down with charts, recent deploys, and an AI summary scoped to its current state.</p>
+        <div class="mini">
+          <div><span class="d"></span> Compare up to six services without leaving the page</div>
+          <div><span class="d"></span> Latency, throughput and error trends with real deltas</div>
+          <div><span class="d"></span> A contextual summary written for the thing you're looking at</div>
+        </div>
+      </div>
+      <div class="mock">
+        <div class="mock-h"><span class="t">Service comparison</span><span class="chip ok">healthy</span></div>
+        <div class="kv">
+          <span class="k">payments-api</span><span class="v dn">412ms</span>
+          <span class="k">edge-gateway</span><span class="v up">76ms</span>
+          <span class="k">search-svc</span><span class="v">132ms</span>
+          <span class="k">media-cdn</span><span class="v up">41ms</span>
+        </div>
+        <div class="spark">
+          <i style="height:40%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:70%"></i><i class="hot" style="height:92%"></i><i style="height:62%"></i><i style="height:75%"></i><i style="height:58%"></i><i style="height:80%"></i><i class="hot" style="height:100%"></i><i style="height:66%"></i><i style="height:72%"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="feat-row">
+      <div class="feat-copy">
+        <span class="eyebrow">Automations</span>
+        <h3>Routine work that runs itself</h3>
+        <p>Turn any recurring check into a scheduled automation that posts results to Slack, Teams, your docs or your ticketing board. wardn watches how your team works and suggests the automations worth creating.</p>
+        <div class="mini">
+          <div><span class="d"></span> Natural-language, cron, or visual schedules</div>
+          <div><span class="d"></span> Outputs delivered to the tools you already use</div>
+          <div><span class="d"></span> AI-suggested automations from your own patterns</div>
+        </div>
+      </div>
+      <div class="mock">
+        <div class="mock-h"><span class="t">Automations</span><span class="chip ok">4 active</span></div>
+        <div class="ins"><span class="bar" style="background:var(--accent);"></span><div class="body"><div class="hl">Daily operations briefing</div><div class="mt">Weekdays 9:00 → #ops-briefing</div></div></div>
+        <div class="ins"><span class="bar" style="background:var(--ok);"></span><div class="body"><div class="hl">Weekly cost digest</div><div class="mt">Mondays 9:00 → Docs + #finops</div></div></div>
+        <div class="ins"><span class="bar" style="background:var(--warn);"></span><div class="body"><div class="hl">Suggested · on-call handover</div><div class="mt">Detected from your activity</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="integrations" style="padding-top:20px;">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Connect once</span>
+      <h2>Works with the tools you already run</h2>
+      <p>Native integrations over the Model Context Protocol — observability, infrastructure, ticketing, docs and comms. Connect them in settings, then use them everywhere.</p>
+    </div>
+    <div class="logos">
+      <span class="logo-chip"><span class="g" style="background:#632ca6;">D</span> Datadog</span>
+      <span class="logo-chip"><span class="g" style="background:#f06a6a;">A</span> AWS</span>
+      <span class="logo-chip"><span class="g" style="background:#326ce5;">K</span> Kubernetes</span>
+      <span class="logo-chip"><span class="g" style="background:#ef7b4d;">A</span> ArgoCD</span>
+      <span class="logo-chip"><span class="g" style="background:#5e6ad2;">L</span> Linear</span>
+      <span class="logo-chip"><span class="g" style="background:#0052cc;">J</span> Jira</span>
+      <span class="logo-chip"><span class="g" style="background:#4a154b;">S</span> Slack</span>
+      <span class="logo-chip"><span class="g" style="background:#4b53bc;">T</span> Teams</span>
+      <span class="logo-chip"><span class="g" style="background:#172b4d;">C</span> Confluence</span>
+      <span class="logo-chip"><span class="g" style="background:#000;">N</span> Notion</span>
+      <span class="logo-chip"><span class="g" style="background:#24292f;">G</span> GitHub</span>
+      <span class="logo-chip"><span class="g" style="background:#06ac38;">P</span> PagerDuty</span>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <span class="eyebrow">See it for yourself</span>
+    <h2>The clearest view of your operations.</h2>
+    <p>Click through the full console — every screen is live and interactive. No signup, nothing installed.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary btn-lg" href="console.html">Open the live demo <span class="arrow">→</span></a>
+      <a class="btn btn-ghost btn-lg" href="mailto:sales@wardn.io?subject=wardn%20sales%20enquiry">Contact sales</a>
+      <a class="btn btn-ghost btn-lg" href="mailto:sales@wardn.io?subject=Request%20a%20quote%20for%20wardn">Get a quote</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <a class="brand" href="#top"><span class="logo">w</span> wardn</a>
+      <div class="foot-links">
+        <a href="console.html">Live demo</a>
+        <a href="#selfhost">Self-hosted</a>
+        <a href="#features">Features</a>
+        <a href="#integrations">Integrations</a>
+        <a href="mailto:sales@wardn.io?subject=wardn%20sales%20enquiry">Contact sales</a>
+      </div>
+    </div>
+    <div class="copyr">Self-hosted operations intelligence · runs entirely in your environment</div>
+  </div>
+</footer>
+
+<script>
+// nav shadow on scroll
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive:true });
+
+// (hero product preview removed)
+</script>
+
+</body>
+</html>

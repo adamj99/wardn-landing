@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>wardn — Operations Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=16" />
+</head>
+<body>
+  <template id="__bundler_thumbnail" data-bg-color="#0c0d0e">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect x="120" y="180" width="960" height="440" rx="14" fill="none" stroke="#3b82f6" stroke-width="4"/>
+      <path d="M 180 480 L 320 420 L 440 460 L 560 360 L 700 410 L 820 320 L 960 380 L 1020 340"
+            fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="560" cy="360" r="10" fill="#22c55e"/>
+      <circle cx="820" cy="320" r="10" fill="#f59e0b"/>
+      <text x="600" y="720" text-anchor="middle" font-family="Inter, sans-serif" font-size="42" font-weight="600" fill="#e5e7eb">ValidOps</text>
+    </svg>
+  </template>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script src="data.js?v=wardn5"></script>
+  <script type="text/babel" src="charts.jsx?v=wardn5"></script>
+  <script type="text/babel" src="tweaks-panel.jsx?v=wardn5"></script>
+  <script type="text/babel" src="components-core.jsx?v=wardn5"></script>
+  <script type="text/babel" src="components-perf.jsx?v=wardn5"></script>
+  <script type="text/babel" src="components-drill.jsx?v=wardn5"></script>
+  <script type="text/babel" src="components-tabs.jsx?v=wardn5"></script>
+  <script type="text/babel" src="components-settings.jsx?v=wardn5"></script>
+  <script type="text/babel" src="app.jsx?v=wardn5"></script>
+</body>
+</html>
