@@ -1,0 +1,25 @@
+#!/bin/sh
+# Ensure index.html always has required blocks before committing
+
+FAIL=0
+
+if ! grep -q "G-C9KBS8RWY5" index.html; then
+  echo "❌ index.html is missing GA4 analytics snippet"
+  FAIL=1
+fi
+
+if ! grep -q 'og:image' index.html; then
+  echo "❌ index.html is missing Open Graph meta tags"
+  FAIL=1
+fi
+
+if grep -q 'wardn\.io' index.html; then
+  echo "❌ index.html contains wardn.io links — should be wardn.run"
+  FAIL=1
+fi
+
+if [ $FAIL -ne 0 ]; then
+  echo ""
+  echo "Run: claude 'restore SEO, GA4 and wardn.run links in index.html then push'"
+  exit 1
+fi
