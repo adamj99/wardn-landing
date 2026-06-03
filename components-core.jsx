@@ -19,7 +19,6 @@ function Rail({ active, setActive }) {
     { id: 'overview', icon: 'home', alert: false, label: 'Overview' },
     { id: 'workspaces', icon: 'chat', alert: false, label: 'Workspaces' },
     { id: 'automations', icon: 'activity', alert: true, label: 'Automations' },
-    { id: 'monitors', icon: 'pulse', alert: false, label: 'Monitors' },
   ];
   return (
     <aside className="rail">
@@ -43,12 +42,9 @@ function Topbar({ now }) {
   return (
     <div className="topbar">
       <div className="crumb">
-        <span>wardn</span>
-        <Icon name="chev" size={12} />
-        <b>Operations Console</b>
+        <b>wardn</b>
       </div>
       <div className="topbar-spacer" />
-      <span className="live">Live · {t} UTC</span>
       <div className="search">
         <Icon name="search" size={14} />
         <input placeholder="Jump to a service, metric, or alert…" />

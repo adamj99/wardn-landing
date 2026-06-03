@@ -138,7 +138,6 @@ function CostPage() {
             <button data-on="true">By category</button>
             <button>By region</button>
           </div>
-          <button className="btn ghost"><Icon name="sparkles" size={12}/> Find waste</button>
         </div>
       </div>
       <div className="card">

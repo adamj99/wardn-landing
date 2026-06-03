@@ -604,11 +604,11 @@ const WS_OPS_TEAMS = [
   { id: 'bizops',  name: 'BizOps',       members: 3,  desc: 'Customer success & cost reporting' },
 ];
 const WS_CUSTOMERS = [
-  { id: 'cust-1', name: 'Galaxy Digital',     tier: 'Enterprise', mau: '2.4M', spend: '$48k/mo', sla: '99.95%' },
-  { id: 'cust-2', name: 'Aave Companies',     tier: 'Growth',     mau: '1.1M', spend: '$22k/mo', sla: '99.9%'  },
-  { id: 'cust-3', name: 'Lido DAO',           tier: 'Enterprise', mau: '880k', spend: '$31k/mo', sla: '99.95%' },
-  { id: 'cust-4', name: 'Uniswap Labs',       tier: 'Enterprise', mau: '3.2M', spend: '$62k/mo', sla: '99.95%' },
-  { id: 'cust-5', name: 'Frax Finance',       tier: 'Growth',     mau: '410k', spend: '$9k/mo',  sla: '99.9%'  },
+  { id: 'cust-1', name: 'Northwind Systems',  tier: 'Enterprise', mau: '2.4M', spend: '$48k/mo', sla: '99.95%' },
+  { id: 'cust-2', name: 'Brightlayer',        tier: 'Growth',     mau: '1.1M', spend: '$22k/mo', sla: '99.9%'  },
+  { id: 'cust-3', name: 'Meridian Labs',      tier: 'Enterprise', mau: '880k', spend: '$31k/mo', sla: '99.95%' },
+  { id: 'cust-4', name: 'Acme Cloud',         tier: 'Enterprise', mau: '3.2M', spend: '$62k/mo', sla: '99.95%' },
+  { id: 'cust-5', name: 'Fernweh Data',       tier: 'Growth',     mau: '410k', spend: '$9k/mo',  sla: '99.9%'  },
 ];
 
 const DATA = { CHAINS, ANOMALIES, SLOS, PREDICT, COSTS_BY_CHAIN, DEPLOYMENTS, RPC_VOLUME, RPC_TRAFFIC, ALERTS_FEED, COST_DETAIL, INCIDENTS, LINEAR_TICKETS, AUTOMATIONS, AUTO_SUGGESTIONS, FAILURE_CLUSTERS, WORKSPACES, MCP_SERVERS, NETWORK_CONFIGS, MODEL_OPTIONS, MODELS_CFG, SKILLS, SKILL_DETAIL_SAMPLE, PROFILE, WS_NETWORKS, WS_OPS_TEAMS, WS_CUSTOMERS, TICKETING_TOOLS, DOCS_TOOLS, COMMS_TOOLS, OPS_WORKSPACES, NOW };
