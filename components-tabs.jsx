@@ -764,20 +764,6 @@ function WorkspacesPage() {
         <div className="kpi"><div className="lbl">Pinned</div><div className="val">{pinned.length}</div><div className="sub">across {new Set(pinned.map(p=>p.chain).filter(Boolean)).size || 'multi'} services</div></div>
       </div>
 
-      {/* AI suggestion */}
-      <div className="card ai-callout">
-        <div className="ai-callout-icon"><Icon name="sparkles" size={14}/></div>
-        <div className="ai-callout-body">
-          <div className="ai-callout-title"><span className="ai-mark">AI</span> Two workspaces look like duplicates</div>
-          <div className="ai-callout-text">
-            <b>Tac</b> and <b>TAC</b> were created 4 days apart and reference overlapping services. Consider merging.
-          </div>
-        </div>
-        <div className="ai-callout-actions">
-          <button className="btn ghost">Dismiss</button>
-          <button className="btn primary">Review &amp; merge</button>
-        </div>
-      </div>
 
       {/* Pinned */}
       <div className="section-h" style={{ marginTop: 'var(--gap)' }}>
