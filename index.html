@@ -243,6 +243,21 @@ section{padding:74px 0;}
 .final p{font-size:18px; color:var(--text-2); margin:20px auto 0; max-width:50ch;}
 .final .hero-cta{justify-content:center;}
 
+/* ---- pricing ---- */
+#pricing{padding:80px 0;}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:800px;margin:48px auto 0;}
+.pricing-card{background:var(--bg-card);border:1px solid var(--line);border-radius:var(--r);padding:36px;display:flex;flex-direction:column;gap:20px;}
+.pricing-card-featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+.pricing-tier{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;}
+.pricing-price{font-size:42px;font-weight:700;line-height:1;color:var(--ink);}
+.pricing-period{font-size:16px;font-weight:400;color:var(--text-3);}
+.pricing-desc{font-size:14px;color:var(--text-2);line-height:1.5;}
+.pricing-features{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;flex:1;}
+.pricing-features li{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text-2);}
+.pricing-features li svg{color:var(--ok);flex-shrink:0;}
+.pricing-card .btn{margin-top:4px;justify-content:center;}
+@media(max-width:600px){.pricing-grid{grid-template-columns:1fr;}}
+
 /* ---- footer ---- */
 footer{border-top:1px solid var(--line); padding:40px 0;}
 .foot-inner{display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
@@ -270,6 +285,7 @@ footer{border-top:1px solid var(--line); padding:40px 0;}
       <a href="#selfhost">Self-hosted</a>
       <a href="#features">Features</a>
       <a href="#integrations">Integrations</a>
+      <a href="#pricing">Pricing</a>
     </nav>
     <div class="nav-cta">
       <a class="btn btn-ghost" href="mailto:sales@wardn.run?subject=wardn%20sales%20enquiry">Contact sales</a>
@@ -465,6 +481,49 @@ footer{border-top:1px solid var(--line); padding:40px 0;}
       <span class="logo-chip"><span class="g" style="background:#000;">N</span> Notion</span>
       <span class="logo-chip"><span class="g" style="background:#24292f;">G</span> GitHub</span>
       <span class="logo-chip"><span class="g" style="background:#06ac38;">P</span> PagerDuty</span>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-head center">
+      <span class="eyebrow">Pricing</span>
+      <h2>Simple, flat pricing.<br>No seats. No telemetry.</h2>
+      <p>One price for your whole team. Deploy it, run it, own it — no usage tracking, no data leaving your network.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <div class="pricing-tier">License</div>
+        <div class="pricing-price">$2,499<span class="pricing-period"> one-time</span></div>
+        <div class="pricing-desc">Buy once, deploy forever. No subscription, no renewal required.</div>
+        <ul class="pricing-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Full wardn console</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> All integrations</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> AI assistant</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Unlimited users</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Self-hosted, runs in your VPC</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Community support</li>
+        </ul>
+        <a class="btn btn-primary" href="mailto:sales@wardn.run?subject=wardn%20License%20purchase">Get started <span class="arrow">→</span></a>
+      </div>
+
+      <div class="pricing-card pricing-card-featured">
+        <div class="pricing-tier">Enterprise</div>
+        <div class="pricing-price">$400<span class="pricing-period"> / month</span></div>
+        <div class="pricing-desc">For teams that want updates, support and a direct line to the roadmap.</div>
+        <ul class="pricing-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Everything in License</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> All updates &amp; new integrations</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Dedicated support channel</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> SLA guarantee</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Priority feature requests</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Onboarding assistance</li>
+        </ul>
+        <a class="btn btn-primary" href="mailto:sales@wardn.run?subject=wardn%20Enterprise%20enquiry">Talk to us <span class="arrow">→</span></a>
+      </div>
+
     </div>
   </div>
 </section>
