@@ -1,0 +1,1322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>wardn Docs — Getting started, skills, integrations &amp; configuration</title>
+
+<!-- SEO -->
+<meta name="description" content="Complete documentation for wardn — self-hosted operations intelligence. Getting started, skills reference, integrations, workspaces, automations and configuration." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://wardn.run/docs.html" />
+
+<!-- Favicons -->
+<link rel="icon" href="logo-favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="logo-favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://wardn.run/docs.html" />
+<meta property="og:title" content="wardn Docs — Getting started, skills, integrations &amp; configuration" />
+<meta property="og:description" content="Complete documentation for wardn — self-hosted operations intelligence." />
+<meta property="og:image" content="https://wardn.run/og.png" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content="https://wardn.run/docs.html" />
+<meta name="twitter:title" content="wardn Docs — Getting started, skills, integrations &amp; configuration" />
+<meta name="twitter:description" content="Complete documentation for wardn — self-hosted operations intelligence." />
+<meta name="twitter:image" content="https://wardn.run/og.png" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C9KBS8RWY5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-C9KBS8RWY5');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --font-sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,monospace;
+  --bg:#f6f3ee; --bg-elev:#fbf9f5; --bg-card:#fff; --bg-sunken:#efeae2;
+  --ink:#0e0d0b; --ink-2:#3a3631; --line:#e8e1d4; --line-strong:#d6cdb8;
+  --text:#1c1a16; --text-2:#4a4640; --text-3:#837d72; --text-4:#b3aca0;
+  --accent:#5a4ee8; --accent-2:#3f34c4; --accent-soft:#ece9fc;
+  --ok:#1f7a4d; --warn:#b46a16; --bad:#b8341d;
+  --r:14px; --r-sm:9px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:var(--font-sans); font-size:16px; line-height:1.6;
+  -webkit-font-smoothing:antialiased; font-feature-settings:"ss01","cv11";
+}
+a{color:inherit; text-decoration:none;}
+.mono{font-family:var(--font-mono);}
+.wrap{max-width:1160px; margin:0 auto; padding:0 28px;}
+.eyebrow{
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent); font-weight:600;
+}
+
+/* ---- buttons ---- */
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:11px 18px; border-radius:10px; font-size:14.5px; font-weight:600;
+  border:1px solid transparent; cursor:pointer; transition:transform .12s, background .15s, border-color .15s;
+  white-space:nowrap;
+}
+.btn:hover{transform:translateY(-1px);}
+.btn-primary{background:var(--ink); color:#f6f3ee;}
+.btn-primary:hover{background:var(--accent);}
+.btn-ghost{border-color:var(--line-strong); color:var(--text); background:var(--bg-card);}
+.btn-ghost:hover{border-color:var(--ink); background:var(--bg-elev);}
+.btn-lg{padding:14px 24px; font-size:15.5px; border-radius:12px;}
+.arrow{transition:transform .15s;}
+.btn:hover .arrow{transform:translateX(3px);}
+
+/* ---- nav ---- */
+header.nav{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in oklab, var(--bg) 80%, transparent);
+  backdrop-filter:blur(12px); border-bottom:1px solid transparent;
+  transition:border-color .2s;
+}
+header.nav.scrolled{border-bottom-color:var(--line);}
+.nav-inner{display:flex; align-items:center; gap:28px; height:66px;}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:17px; letter-spacing:-.01em;}
+.brand .logo{
+  width:30px; height:30px; border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),oklch(.62 .16 200));
+  display:grid; place-items:center; color:#fff; font-weight:700; font-size:15px;
+}
+.nav-links{display:flex; gap:24px; margin-left:8px;}
+.nav-links a{font-size:14px; color:var(--text-2); font-weight:500;}
+.nav-links a:hover{color:var(--text);}
+.nav-links a.active{color:var(--accent); font-weight:600;}
+.nav-cta{margin-left:auto; display:flex; gap:10px; align-items:center;}
+
+/* ---- footer ---- */
+footer{border-top:1px solid var(--line); padding:40px 0;}
+.foot-inner{display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+.foot-inner .brand{font-size:15px;}
+.foot-links{display:flex; gap:22px; margin-left:auto; flex-wrap:wrap;}
+.foot-links a{font-size:13.5px; color:var(--text-3);}
+.foot-links a:hover{color:var(--text);}
+.copyr{font-family:var(--font-mono); font-size:12px; color:var(--text-4); margin-top:18px;}
+
+/* ---- docs layout ---- */
+.docs-layout{display:grid; grid-template-columns:220px 1fr; min-height:calc(100vh - 66px); max-width:1160px; margin:0 auto; padding:0 28px;}
+.docs-sidebar{position:sticky; top:66px; height:calc(100vh - 66px); overflow-y:auto; padding:32px 24px 32px 0; border-right:1px solid var(--line);}
+.docs-content{padding:40px 0 80px 52px;}
+.sidebar-group{margin-bottom:22px;}
+.sidebar-group-label{font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.12em; color:var(--text-4); font-weight:600; margin-bottom:8px;}
+.sidebar-link{display:block; font-size:13.5px; color:var(--text-2); padding:4px 0; line-height:1.4; transition:color .12s;}
+.sidebar-link:hover{color:var(--text);}
+.sidebar-link.active{color:var(--accent); font-weight:500;}
+.docs-section{margin-bottom:64px; scroll-margin-top:90px;}
+.docs-section h1{font-size:28px; font-weight:700; letter-spacing:-.025em; margin:0 0 6px;}
+.docs-lead{font-size:16px; color:var(--text-2); margin:0 0 32px; line-height:1.6;}
+.docs-section h2{font-size:19px; font-weight:700; letter-spacing:-.015em; margin:40px 0 12px; padding-top:40px; border-top:1px solid var(--line);}
+.docs-section h3{font-size:15px; font-weight:600; margin:24px 0 8px;}
+.docs-section p{font-size:14.5px; color:var(--text-2); line-height:1.7; margin:0 0 14px;}
+.docs-section ul{padding-left:20px; margin:0 0 16px;}
+.docs-section li{font-size:14.5px; color:var(--text-2); line-height:1.65; margin-bottom:5px;}
+.docs-section code{font-family:var(--font-mono); font-size:12.5px; background:var(--bg-sunken); padding:2px 6px; border-radius:4px; color:var(--ink);}
+.docs-section pre{background:var(--ink); color:#e8e4da; border-radius:var(--r); padding:18px 22px; overflow-x:auto; margin:14px 0 22px; font-family:var(--font-mono); font-size:12.5px; line-height:1.6;}
+.docs-section pre code{background:none; color:inherit; padding:0; font-size:12.5px;}
+.callout{background:var(--accent-soft); border-left:3px solid var(--accent); border-radius:0 var(--r-sm) var(--r-sm) 0; padding:12px 16px; margin:14px 0 20px; font-size:13.5px; color:var(--text-2); line-height:1.6;}
+.callout b{color:var(--ink);}
+.callout-warn{background:#fef7ed; border-left-color:var(--warn);}
+.callout-warn b{color:var(--warn);}
+
+/* skill cards */
+.skill-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r); padding:18px 20px; transition:border-color .15s; margin-bottom:20px;}
+.skill-card:hover{border-color:var(--line-strong);}
+.skill-card-head{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+.skill-slug{font-family:var(--font-mono); font-size:12px; background:var(--accent-soft); color:var(--accent); padding:3px 9px; border-radius:6px; font-weight:600; white-space:nowrap;}
+.skill-alias{font-family:var(--font-mono); font-size:11px; background:var(--bg-sunken); color:var(--text-3); padding:2px 7px; border-radius:4px; white-space:nowrap;}
+.skill-card-name{font-size:14.5px; font-weight:650;}
+.skill-card p{font-size:13px; color:var(--text-2); margin:0 0 10px; line-height:1.55;}
+.skill-section-label{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-4); font-weight:600; margin:10px 0 4px;}
+.skill-meta-row{display:flex; gap:6px; flex-wrap:wrap;}
+.skill-meta-tag{font-family:var(--font-mono); font-size:10.5px; background:var(--bg-sunken); color:var(--text-3); padding:2px 7px; border-radius:4px;}
+
+/* integration cards */
+.int-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; margin-top:16px;}
+.int-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r); padding:16px 18px;}
+.int-card-head{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+.int-icon{width:32px; height:32px; border-radius:8px; display:grid; place-items:center; color:#fff; font-family:var(--font-mono); font-size:11px; font-weight:700; flex-shrink:0;}
+.int-card h4{font-size:14.5px; font-weight:650; margin:0;}
+.int-card p{font-size:13px; color:var(--text-2); margin:0 0 8px; line-height:1.5;}
+.badge-soon{display:inline-block; font-family:var(--font-mono); font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; background:#fff3e0; color:#b46a16; border:1px solid #f5c07a; border-radius:5px; padding:2px 7px; vertical-align:middle; margin-left:6px;}
+.int-creds{display:flex; flex-direction:column; gap:3px;}
+.int-cred{font-family:var(--font-mono); font-size:11px; color:var(--accent); background:var(--accent-soft); padding:2px 7px; border-radius:4px; display:inline-block; width:fit-content;}
+
+/* env table */
+.env-table{width:100%; border-collapse:collapse; margin:12px 0 24px; font-size:13.5px;}
+.env-table th{text-align:left; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-4); padding:0 12px 10px 0; border-bottom:1px solid var(--line);}
+.env-table td{padding:9px 12px 9px 0; border-bottom:1px solid var(--line); vertical-align:top;}
+.env-table td:first-child{font-family:var(--font-mono); font-size:12px; color:var(--accent); width:40%;}
+.env-table td:last-child{color:var(--text-2); line-height:1.5;}
+.env-table .req{font-family:var(--font-mono); font-size:10px; background:var(--bad); color:#fff; padding:1px 5px; border-radius:3px; margin-left:6px; vertical-align:middle;}
+
+/* numbered steps */
+.step{display:flex; gap:14px; margin-bottom:20px;}
+.step-num{width:28px; height:28px; border-radius:99px; background:var(--accent); color:#fff; font-size:13px; font-weight:700; display:grid; place-items:center; flex-shrink:0; margin-top:1px;}
+.step-body h4{font-size:14.5px; font-weight:650; margin:2px 0 6px;}
+.step-body p{font-size:13.5px; color:var(--text-2); margin:0; line-height:1.55;}
+
+/* automation cards */
+.auto-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; margin-top:16px;}
+.auto-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r); padding:16px 18px;}
+.auto-card-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.auto-card h4{font-size:14px; font-weight:650; margin:0;}
+.auto-badge{font-family:var(--font-mono); font-size:10px; padding:2px 7px; border-radius:4px; font-weight:600;}
+.auto-badge.cron{background:#e8f5ee; color:var(--ok);}
+.auto-badge.thresh{background:#fef7ed; color:var(--warn);}
+.auto-card p{font-size:12.5px; color:var(--text-2); margin:0 0 8px; line-height:1.5;}
+.auto-cron{font-family:var(--font-mono); font-size:11.5px; color:var(--text-3); background:var(--bg-sunken); padding:4px 10px; border-radius:5px; display:inline-block;}
+
+/* workspace template list */
+.ws-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; margin-top:16px;}
+.ws-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--r-sm); padding:14px 16px;}
+.ws-card h4{font-family:var(--font-mono); font-size:12.5px; color:var(--accent); font-weight:600; margin:0 0 5px;}
+.ws-card p{font-size:12.5px; color:var(--text-2); margin:0; line-height:1.45;}
+
+/* skill file anatomy */
+.file-anatomy{background:var(--ink); color:#e8e4da; border-radius:var(--r); padding:18px 22px; font-family:var(--font-mono); font-size:12.5px; line-height:1.7; margin:14px 0 22px; overflow-x:auto;}
+.file-anatomy .cm{color:#6b7280;}
+.file-anatomy .kw{color:#a78bfa;}
+.file-anatomy .str{color:#86efac;}
+.file-anatomy .hl{background:color-mix(in oklab,var(--accent) 20%,transparent); border-radius:3px; padding:0 3px;}
+
+/* responsive */
+@media (max-width:860px){
+  .docs-layout{grid-template-columns:1fr; padding:0 20px;}
+  .docs-sidebar{display:none;}
+  .docs-content{padding:24px 0 60px;}
+}
+@media (max-width:900px){
+  .nav-links{display:none;}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="index.html"><span class="logo">w</span> wardn</a>
+    <nav class="nav-links">
+      <a href="index.html#benefits">Why wardn</a>
+      <a href="index.html#selfhost">Self-hosted</a>
+      <a href="index.html#features">Features</a>
+      <a href="index.html#integrations">Integrations</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="docs.html" class="active">Docs</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="mailto:sales@wardn.run?subject=wardn%20sales%20enquiry">Contact sales</a>
+      <a class="btn btn-primary" href="console.html">Live demo <span class="arrow">→</span></a>
+    </div>
+  </div>
+</header>
+
+<div class="docs-layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Getting started</div>
+      <a class="sidebar-link" href="#getting-started">Overview</a>
+      <a class="sidebar-link" href="#prerequisites">Prerequisites</a>
+      <a class="sidebar-link" href="#installation">Installation</a>
+      <a class="sidebar-link" href="#first-run">First run</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Product</div>
+      <a class="sidebar-link" href="#dashboard">Dashboard</a>
+      <a class="sidebar-link" href="#workspaces">Workspaces</a>
+      <a class="sidebar-link" href="#automations">Automations</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Skills</div>
+      <a class="sidebar-link" href="#skills">Built-in skills</a>
+      <a class="sidebar-link" href="#building-skills">Building skills</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Integrations</div>
+      <a class="sidebar-link" href="#integrations">All integrations</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">AI providers</div>
+      <a class="sidebar-link" href="#ai-providers">Overview</a>
+      <a class="sidebar-link" href="#ai-cloud">Cloud APIs</a>
+      <a class="sidebar-link" href="#ai-oauth">OAuth (no key)</a>
+      <a class="sidebar-link" href="#ai-local">Local models</a>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Reference</div>
+      <a class="sidebar-link" href="#configuration">Configuration</a>
+    </div>
+  </aside>
+
+  <!-- ── Main content ── -->
+  <main class="docs-content">
+
+    <!-- ════════════════════════════════════
+         GETTING STARTED
+    ════════════════════════════════════ -->
+    <section class="docs-section" id="getting-started">
+      <h1>Getting started</h1>
+      <p class="docs-lead">wardn runs entirely in your environment — no data leaves your network. You'll be up in under ten minutes.</p>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+      <p>You need the following on the host machine:</p>
+      <ul>
+        <li><strong>Docker 24+</strong> — wardn ships as a set of containers. Verify with <code>docker --version</code>.</li>
+        <li><strong>Docker Compose v2</strong> — bundled with Docker Desktop; on Linux install the <code>docker-compose-plugin</code> package. Verify with <code>docker compose version</code>.</li>
+        <li><strong>8 GB RAM</strong> minimum available for the container set. 16 GB recommended for production use with multiple integrations.</li>
+        <li><strong>An LLM API key</strong> — Anthropic Claude is recommended. Any OpenAI-compatible endpoint is supported, including locally-hosted models.</li>
+      </ul>
+
+      <div class="callout">
+        wardn needs no public IP and no inbound ports. All traffic is outbound — from your network to your tools.
+      </div>
+
+      <h2 id="installation">Installation</h2>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Obtain container registry credentials</h4>
+          <p>wardn images are hosted in a private container registry. <a href="mailto:sales@wardn.run" style="color:var(--accent);">Contact sales</a> to receive your registry username and token, then authenticate Docker:</p>
+        </div>
+      </div>
+      <pre><code>docker login ghcr.io -u YOUR_USERNAME --password-stdin
+# Paste your registry token and press Enter</code></pre>
+
+      <div class="callout callout-warn" style="margin-bottom:20px;">
+        <b>Registry credentials are required.</b> <code>docker compose up</code> will fail to pull images without them. Reach out to <a href="mailto:sales@wardn.run" style="color:var(--warn);">sales@wardn.run</a> if you have not yet received your token.
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Clone the repository</h4>
+          <p>Clone to the machine running wardn.</p>
+        </div>
+      </div>
+      <pre><code>git clone https://github.com/wardn-run/wardn.git
+cd wardn</code></pre>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Create your environment file</h4>
+          <p>Copy the example and open it in your editor. At minimum set <code>POSTGRES_PASSWORD</code>, <code>SECRET_KEY</code>, and at least one LLM API key (e.g. <code>ANTHROPIC_API_KEY</code>).</p>
+        </div>
+      </div>
+      <pre><code>cp .env.example .env
+# Edit .env — set POSTGRES_PASSWORD, SECRET_KEY, and ANTHROPIC_API_KEY at minimum</code></pre>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Start wardn</h4>
+          <p>Pulls images on first run — give it a minute.</p>
+        </div>
+      </div>
+      <pre><code>make up</code></pre>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Verify the stack is healthy</h4>
+          <p>All containers should be healthy within 30 seconds.</p>
+        </div>
+      </div>
+      <pre><code>docker compose ps
+# All services should show: running (healthy)
+
+curl http://localhost:8000/health
+# {"status":"ok"}</code></pre>
+
+      <div class="callout callout-warn">
+        <b>An LLM API key is required.</b> wardn will start without one but the AI assistant will be disabled. Set at least one provider key (e.g. <code>ANTHROPIC_API_KEY</code>) before using any skill or the chat interface.
+      </div>
+
+      <div class="callout" style="margin-top:16px; border-left:3px solid var(--accent); background:var(--accent-soft);">
+        <b>Deploying wardn on Kubernetes is coming soon.</b> A Helm chart and production-grade K8s manifests are in active development. If you want early access or have an enterprise deployment requirement, <a href="mailto:sales@wardn.run" style="color:var(--accent-2);">contact sales</a>.
+      </div>
+
+      <h2 id="first-run">First run</h2>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Open the console</h4>
+          <p>Navigate to <a href="http://localhost:3000" style="color:var(--accent);">http://localhost:3000</a> in your browser.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Create a workspace</h4>
+          <p>Click <strong>New workspace</strong> and pick a template — incidents, kubernetes, aws-infra, or start blank. Templates pre-load context and skills for that domain.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Connect an integration</h4>
+          <p>Go to <strong>Settings → Integrations</strong> and add credentials for at least one tool. Datadog, Kubernetes, or Slack are the most useful starting points. All credentials are encrypted at rest.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Run your first skill</h4>
+          <p>Type <code>/morning</code> in the workspace chat. wardn queries all connected integrations in parallel and returns a full ops briefing.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         DASHBOARD
+    ════════════════════════════════════ -->
+    <section class="docs-section" id="dashboard">
+      <h1>Dashboard</h1>
+      <p class="docs-lead">Your home screen. One view of everything that matters right now.</p>
+
+      <h2>What changed</h2>
+      <p>The top strip surfaces auto-detected anomalies ranked by impact, classified into four types:</p>
+      <ul>
+        <li><strong>Incidents</strong> — active alerts or monitors in a firing state across Datadog or ArgoCD.</li>
+        <li><strong>Regressions</strong> — performance or reliability metrics that have moved meaningfully outside their historical range.</li>
+        <li><strong>Cost drift</strong> — AWS or Kubernetes spend tracking above or below its 7-day baseline by a configurable threshold (default 20%).</li>
+        <li><strong>Opportunities</strong> — positive signals such as cost savings from right-sizing, or services performing above their peer group.</li>
+      </ul>
+      <p>Each item links to the source data and has a one-click <strong>Investigate</strong> action that opens a <code>/investigate</code> session scoped to that anomaly.</p>
+
+      <h2>Cost tracking</h2>
+      <p>Month-to-date spend with a 30-day sparkline, aggregated across connected cost sources — AWS, Datadog cloud cost metrics, and Kubernetes namespace costs via OpenCost. Updates hourly, delta vs the previous 30 days.</p>
+
+      <h2>Deployments</h2>
+      <p>Recent ArgoCD syncs with status (Synced, OutOfSync, Degraded) and health. Click any deployment for full detail.</p>
+
+      <h2>Open tickets</h2>
+      <p>High-priority issues assigned to you from your connected ticketing tool. Supports Linear and others. Hidden when no ticketing integration is configured.</p>
+    </section>
+
+    <!-- ════════════════════════════════════
+         SKILLS
+    ════════════════════════════════════ -->
+    <section class="docs-section" id="skills">
+      <h1>Skills</h1>
+      <p class="docs-lead">Skills are the things you run in chat. Type a slash command — or just describe what you want — and wardn queries your integrations in parallel, runs the analysis, and returns structured output. Comes with built-ins for common ops workflows. Build your own or import from your team.</p>
+
+      <div class="callout">
+        You don't need the slash command. <em>"what happened overnight?"</em> or <em>"why is the payments service slow?"</em> — wardn picks the right skill.
+      </div>
+
+      <!-- /morning -->
+      <h2 id="skill-morning">/morning</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/morning</span>
+          <span class="skill-alias">/briefing</span>
+          <span class="skill-card-name">Morning Briefing</span>
+        </div>
+        <p>Your shift start briefing. Hits every connected integration in parallel and returns a full overnight summary — ready to read or post straight to Slack.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Datadog monitors</span>
+          <span class="skill-meta-tag">AWS Cost Explorer</span>
+          <span class="skill-meta-tag">Kubernetes events</span>
+          <span class="skill-meta-tag">Linear open tickets</span>
+          <span class="skill-meta-tag">ArgoCD sync status</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">HTML widget with overnight service health, cost deltas vs 7-day average, open alerts, assigned Linear tickets, and recommended actions ordered by urgency.</p>
+      </div>
+
+      <!-- /cost -->
+      <h2 id="skill-cost">/cost</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/cost</span>
+          <span class="skill-card-name">Cost Analysis</span>
+        </div>
+        <p>Pulls spend from AWS, Datadog, and OpenCost, then cross-correlates cost spikes with deployments and scaling events. Tells you what changed and when.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">AWS Cost Explorer</span>
+          <span class="skill-meta-tag">Datadog cloud cost</span>
+          <span class="skill-meta-tag">OpenCost via Grafana</span>
+          <span class="skill-meta-tag">Kubernetes scaling events</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Spend breakdown by service, week-over-week trend chart, anomaly highlights with timestamp of inflection, and a root cause hypothesis linking cost changes to infrastructure events.</p>
+      </div>
+
+      <!-- /handover -->
+      <h2 id="skill-handover">/handover</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/handover</span>
+          <span class="skill-card-name">Incident Handover</span>
+        </div>
+        <p>Reads your Slack incident channels and correlates with Datadog, Kubernetes, ArgoCD, and Linear. Comes out the other end as a structured handover doc, ready to post.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Slack incident channels</span>
+          <span class="skill-meta-tag">Datadog incidents</span>
+          <span class="skill-meta-tag">Kubernetes events &amp; logs</span>
+          <span class="skill-meta-tag">ArgoCD rollout history</span>
+          <span class="skill-meta-tag">Linear tickets</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Structured handover card (Summary, Timeline, Current State, Actions Taken, Outstanding Items, Next Steps). Auto-posted to configured Slack channel and saved as a Notion page.</p>
+      </div>
+      <p>Default lookback is 8 hours. Pass a duration or timestamp to override: <code>/handover 12h</code> or <code>/handover 2026-01-15T06:00Z</code>.</p>
+
+      <!-- /investigate -->
+      <h2 id="skill-investigate">/investigate</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/investigate</span>
+          <span class="skill-card-name">Broad Investigation</span>
+        </div>
+        <p>Something's wrong but you don't know where. Queries everything for the last 6 hours and builds a change correlation timeline.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Datadog monitors &amp; metrics</span>
+          <span class="skill-meta-tag">Kubernetes events</span>
+          <span class="skill-meta-tag">Linear open issues</span>
+          <span class="skill-meta-tag">ArgoCD sync history</span>
+          <span class="skill-meta-tag">Runbook search</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Cross-source report with a unified change correlation timeline, relevant runbook matches, and a prioritized list of hypotheses. Each hypothesis links to the supporting evidence.</p>
+      </div>
+
+      <!-- /k8s -->
+      <h2 id="skill-k8s">/k8s</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/k8s</span>
+          <span class="skill-alias">/pod [name]</span>
+          <span class="skill-card-name">Kubernetes Incident</span>
+        </div>
+        <p>Systematic K8s triage. <code>/k8s</code> sweeps the namespace; <code>/pod [name]</code> targets a specific pod. Works through status, events, logs, node pressure, and recent deploys in order.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Kubernetes pod status &amp; events</span>
+          <span class="skill-meta-tag">Pod logs (last 200 lines)</span>
+          <span class="skill-meta-tag">Node resource pressure</span>
+          <span class="skill-meta-tag">Datadog alerts</span>
+          <span class="skill-meta-tag">ArgoCD rollout history</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Root cause analysis with the most likely failure reason, remediation steps, and optional one-click actions to create a Notion runbook or a Linear ticket.</p>
+      </div>
+
+      <!-- /rca -->
+      <h2 id="skill-rca">/rca</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/rca</span>
+          <span class="skill-alias">/root-cause</span>
+          <span class="skill-card-name">Root Cause Analysis</span>
+        </div>
+        <p>Point it at a Slack thread and wardn reads the incident narrative, correlates with Datadog and Kubernetes state during the window, and drafts the full post-mortem.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Slack thread</span>
+          <span class="skill-meta-tag">Datadog incident &amp; metrics</span>
+          <span class="skill-meta-tag">Kubernetes event history</span>
+          <span class="skill-meta-tag">ArgoCD deploy history</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Full post-mortem saved to Notion with timeline, 5-whys chain, contributing factors, and action items. Linear tickets are created automatically for each action item.</p>
+      </div>
+
+      <!-- /oncall -->
+      <h2 id="skill-oncall">/oncall</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/oncall</span>
+          <span class="skill-card-name">On-Call Handoff</span>
+        </div>
+        <p>Just sat down for your shift. 4-hour lookback, surfaces what's firing, what changed, and what's open — readable in two minutes.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Datadog monitors</span>
+          <span class="skill-meta-tag">Kubernetes events</span>
+          <span class="skill-meta-tag">ArgoCD syncs</span>
+          <span class="skill-meta-tag">Linear open issues</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Priority-ranked list of active issues, recent changes, and any anomalies. Designed to be read in under two minutes.</p>
+      </div>
+
+      <!-- /logs -->
+      <h2 id="skill-logs">/logs</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/logs</span>
+          <span class="skill-alias">/logs [service]</span>
+          <span class="skill-card-name">Log Analysis</span>
+        </div>
+        <p>Cross-source log triage across Datadog and Kubernetes at once. Query by service, time window, or error pattern.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Datadog log search</span>
+          <span class="skill-meta-tag">Kubernetes pod logs</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Error frequency breakdown, representative log samples, timeline of anomalous periods, and suggested next investigation steps.</p>
+      </div>
+
+      <!-- /restart -->
+      <h2 id="skill-restart">/restart</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/restart</span>
+          <span class="skill-alias">/restart [pod-or-deployment]</span>
+          <span class="skill-card-name">Safe Restart</span>
+        </div>
+        <p>Safe restart with a confirmation gate. wardn checks pod state and shows you the blast radius before touching anything.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Kubernetes pod status</span>
+          <span class="skill-meta-tag">Datadog alerts</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Pre-restart health check, confirmation prompt, then post-restart status verification. Write access to Kubernetes is required (read-only mode must be disabled).</p>
+      </div>
+
+      <!-- /rollback -->
+      <h2 id="skill-rollback">/rollback</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/rollback</span>
+          <span class="skill-alias">/rollback [app]</span>
+          <span class="skill-card-name">ArgoCD Rollback</span>
+        </div>
+        <p>Roll back an ArgoCD app. Shows exactly what will change, then waits for your confirmation before doing anything.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">ArgoCD application history</span>
+          <span class="skill-meta-tag">GitHub commit diff</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Before/after diff, confirmation gate, rollback execution, and post-rollback health check.</p>
+      </div>
+
+      <!-- /silence -->
+      <h2 id="skill-silence">/silence</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/silence</span>
+          <span class="skill-alias">/silence [monitor]</span>
+          <span class="skill-card-name">Silence Monitor</span>
+        </div>
+        <p>Create a Datadog maintenance window in plain language. wardn converts it to the right times and confirms before creating.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Datadog monitors</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Confirmation of downtime window created, with link to the Datadog monitor page.</p>
+      </div>
+
+      <!-- /upgrade -->
+      <h2 id="skill-upgrade">/upgrade</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/upgrade</span>
+          <span class="skill-card-name">Upgrade Planner</span>
+        </div>
+        <p>Scans your infrastructure for stale versions — nodes, images, agents. Returns a prioritized upgrade plan sorted by risk.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Kubernetes node versions</span>
+          <span class="skill-meta-tag">Container image ages</span>
+          <span class="skill-meta-tag">ArgoCD application versions</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Upgrade matrix with current vs latest versions, risk classification, and recommended upgrade sequence.</p>
+      </div>
+
+      <!-- /budget -->
+      <h2 id="skill-budget">/budget</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/budget</span>
+          <span class="skill-card-name">Budget Forecast</span>
+        </div>
+        <p>Projects your end-of-month cloud spend based on current burn rate. Flags what's trending over budget.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">AWS Cost Explorer</span>
+          <span class="skill-meta-tag">Datadog cloud cost</span>
+          <span class="skill-meta-tag">OpenCost via Grafana</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Month-to-date spend, projected end-of-month total, budget variance by service, and recommended cost actions.</p>
+      </div>
+
+      <!-- /capacity -->
+      <h2 id="skill-capacity">/capacity</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/capacity</span>
+          <span class="skill-card-name">Capacity Forecast</span>
+        </div>
+        <p>14-day lookahead on when your nodes, volumes, and namespaces hit 85% saturation. Scale before you hit the wall.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Kubernetes node resource usage</span>
+          <span class="skill-meta-tag">Persistent volume usage</span>
+          <span class="skill-meta-tag">Datadog infrastructure metrics</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Capacity timeline with projected saturation dates, current headroom by resource type, and recommended scaling actions.</p>
+      </div>
+
+      <!-- /weekly -->
+      <h2 id="skill-weekly">/weekly</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/weekly</span>
+          <span class="skill-card-name">Weekly Summary</span>
+        </div>
+        <p>7-day infrastructure digest — incidents, cost trends, deployment frequency, and reliability metrics. Send it to leadership or post it to Slack.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">Datadog incidents &amp; monitors</span>
+          <span class="skill-meta-tag">AWS Cost Explorer</span>
+          <span class="skill-meta-tag">ArgoCD deployment frequency</span>
+          <span class="skill-meta-tag">Linear resolved tickets</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Weekly digest with incident count and MTTR, cost week-over-week delta, deployment frequency, and top reliability wins and concerns.</p>
+      </div>
+
+      <!-- /changes -->
+      <h2 id="skill-changes">/changes</h2>
+      <div class="skill-card">
+        <div class="skill-card-head">
+          <span class="skill-slug">/changes</span>
+          <span class="skill-alias">/argocd</span>
+          <span class="skill-card-name">Recent Changes</span>
+        </div>
+        <p>Recent deploys correlated with their GitHub PRs. First thing to check when something breaks.</p>
+        <div class="skill-section-label">Queries</div>
+        <div class="skill-meta-row">
+          <span class="skill-meta-tag">ArgoCD sync history</span>
+          <span class="skill-meta-tag">GitHub PR history</span>
+        </div>
+        <div class="skill-section-label" style="margin-top:10px;">Output</div>
+        <p style="margin:0;">Deployment timeline with linked PRs, authors, and diff summaries. Highlights deployments that overlap with alert or cost anomaly windows.</p>
+      </div>
+
+      <!-- Building skills -->
+      <h2 id="building-skills">Building your own skills</h2>
+      <p>Every skill is a <code>SKILL.md</code> file — plain Markdown, no code. Describe the trigger, the integrations, and the output format. Drop it in the <code>skills/</code> directory and it's live immediately.</p>
+
+      <div class="file-anatomy">
+<span class="cm"># skills/my-service-health/SKILL.md</span>
+
+<span class="kw">## Trigger</span>
+<span class="str">`/my-health`</span>, <span class="str">`/service-health`</span>, or keywords: "service status", "is everything ok"
+
+<span class="kw">## Description</span>
+Check the health of our payment and auth services. Queries Datadog for
+error rates and latency, checks Kubernetes pod health, and summarizes
+open PagerDuty alerts.
+
+<span class="kw">## Integrations</span>
+- Datadog (metrics: <span class="str">service:payments</span>, <span class="str">service:auth</span>)
+- Kubernetes (namespace: <span class="str">production</span>)
+- PagerDuty (service IDs in workspace agent.md)
+
+<span class="kw">## Output format</span>
+HTML status card with: service name, p99 latency, error rate (1h),
+pod health, open alerts. Color-coded by severity.
+
+<span class="kw">## Mode</span>
+flash  <span class="cm"># or: ptc (for deep research with code execution)</span></div>
+
+      <p>Manage skills from <strong>Settings → Skills</strong> in the console, or drop folders directly into <code>skills/</code> on the filesystem.</p>
+
+      <h3>Importing community skills</h3>
+      <p>Skills are plain files — share via Git, copy between instances, or keep a team repo. To pull one from a URL:</p>
+      <pre><code>curl -o skills/weekly-report/SKILL.md \
+  https://raw.githubusercontent.com/your-org/wardn-skills/main/weekly-report/SKILL.md</code></pre>
+
+      <h3>Skill modes</h3>
+      <p>Set mode in the <code>SKILL.md</code> file:</p>
+      <ul>
+        <li><strong>flash</strong> — conversational mode; fast responses without a code execution sandbox. Good for status checks and simple queries.</li>
+        <li><strong>ptc</strong> — deep research mode; runs in a full Python sandbox with access to all MCP tools. Use for analysis, report generation, and multi-step investigations.</li>
+      </ul>
+    </section>
+
+    <!-- ════════════════════════════════════
+         INTEGRATIONS
+    ════════════════════════════════════ -->
+    <section class="docs-section" id="integrations">
+      <h1>Integrations</h1>
+      <p class="docs-lead">Add credentials in <strong>Settings → Integrations</strong> — no restart required. Everything is encrypted at rest.</p>
+
+      <div class="int-grid">
+
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#632ca6;">DD</div>
+            <h4>Datadog</h4>
+          </div>
+          <p>Metrics, logs, monitors, incidents, and APM traces. The primary observability integration used by most built-in skills.</p>
+          <div class="int-creds">
+            <span class="int-cred">DD_API_KEY</span>
+            <span class="int-cred">DD_APPLICATION_KEY</span>
+            <span class="int-cred">DD_SITE</span>
+          </div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#f06a6a;">AWS</div>
+            <h4>AWS</h4>
+          </div>
+          <p>Cost Explorer, EC2/EKS, CloudWatch, and all AWS APIs. Authenticates via IAM Identity Center (SSO) — no static access keys required.</p>
+          <div class="int-creds">
+            <span class="int-cred">AWS_SSO_START_URL</span>
+            <span class="int-cred">AWS_SSO_REGION</span>
+            <span class="int-cred">AWS_SSO_ACCOUNT_ID</span>
+            <span class="int-cred">AWS_SSO_ROLE_NAME</span>
+            <span class="int-cred">AWS_DEFAULT_REGION</span>
+          </div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#326ce5;">K8s</div>
+            <h4>Kubernetes</h4>
+          </div>
+          <p>Pod status, logs, events, deployments, and resource metrics. Runs in read-only mode by default; write actions require explicit approval via the plan-mode interrupt.</p>
+          <div class="int-creds">
+            <span class="int-cred">KUBECONFIG_PATH</span>
+          </div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#4a154b;">SL</div>
+            <h4>Slack</h4>
+          </div>
+          <p>Read incident channel history, search messages, and post handover documents and briefings. Scoped to specific channel IDs — never the full workspace.</p>
+          <div class="int-creds">
+            <span class="int-cred">SLACK_BOT_TOKEN</span>
+            <span class="int-cred">SLACK_SIGNING_SECRET</span>
+            <span class="int-cred">SLACK_INCIDENT_CHANNEL_IDS</span>
+            <span class="int-cred">SLACK_HANDOVER_OUTPUT_CHANNEL_ID</span>
+          </div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#5e6ad2;">LN</div>
+            <h4>Linear</h4>
+          </div>
+          <p>Read high-priority assigned issues, create follow-up tickets from <code>/rca</code> and <code>/k8s</code>, and surface open work on the dashboard.</p>
+          <div class="int-creds">
+            <span class="int-cred">LINEAR_API_KEY</span>
+          </div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#000;">NO</div>
+            <h4>Notion</h4>
+          </div>
+          <p>Create runbooks, post-mortems, and incident documents. Used by <code>/handover</code>, <code>/rca</code>, and <code>/k8s</code>. Connects via OAuth — no API key required; authorize in Settings → Integrations.</p>
+          <div class="int-creds">
+            <span class="int-cred">OAuth (browser authorization)</span>
+            <span class="int-cred">NOTION_RUNBOOK_DATABASE_ID</span>
+          </div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#ef7b4d;">AC</div>
+            <h4>ArgoCD</h4>
+          </div>
+          <p>Application sync status, deployment health, and rollout history. Used to correlate deployments with incidents and cost changes.</p>
+          <div class="int-creds">
+            <span class="int-cred">ARGOCD_URL</span>
+            <span class="int-cred">ARGOCD_TOKEN</span>
+          </div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#f46800;">GR</div>
+            <h4>Grafana</h4>
+          </div>
+          <p>Dashboard panels and OpenCost Kubernetes namespace cost data. Required for per-namespace spend breakdown in <code>/cost</code>.</p>
+          <div class="int-creds">
+            <span class="int-cred">GRAFANA_URL</span>
+            <span class="int-cred">GRAFANA_ADMIN_PASSWORD</span>
+            <span class="int-cred">GRAFANA_DEFAULT_DATASOURCE_UID</span>
+            <span class="int-cred">GRAFANA_OPENCOST_DATASOURCE_UID</span>
+          </div>
+        </div>
+
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#24292e;">GH</div>
+            <h4>GitHub</h4>
+          </div>
+          <p>Correlate deployments with pull requests, search code, and link commits to incidents. Used by <code>/rca</code> and <code>/changes</code> for deployment-to-incident correlation.</p>
+          <div class="int-creds">
+            <span class="int-cred">GITHUB_PAT</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="callout" style="margin-top:24px;">
+        <b>Custom MCP servers:</b> Any MCP-compatible tool can be added under <strong>Settings → Integrations → Add server</strong>. Skills reference integrations by name, so custom ones work immediately alongside built-ins.
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         WORKSPACES
+    ════════════════════════════════════ -->
+    <section class="docs-section" id="workspaces">
+      <h1>Workspaces</h1>
+      <p class="docs-lead">A workspace is a scoped context for the agent — its own <code>agent.md</code> memory, chat history, and integration config. The longer you use a workspace, the more context it accumulates about your environment.</p>
+
+      <h2>What workspaces store</h2>
+      <p>The agent writes to <code>agent.md</code> during every session, building up:</p>
+      <ul>
+        <li><strong>Service and infrastructure context</strong> — what services this workspace covers, their normal operating ranges, and known quirks.</li>
+        <li><strong>Historical incidents</strong> — what happened, when, and how it was resolved.</li>
+        <li><strong>Performance baselines</strong> — the "normal" latency, error rate, or cost for the services in scope.</li>
+        <li><strong>Runbook links</strong> from Notion or Confluence.</li>
+        <li><strong>Key contacts</strong> — who owns which service.</li>
+      </ul>
+      <p>The more you use a workspace, the sharper the agent gets — it learns what "normal" looks like for your environment.</p>
+
+      <h2>Templates</h2>
+      <p>Templates pre-load context and skills for a given domain. Built-in options:</p>
+      <div class="ws-grid">
+        <div class="ws-card">
+          <h4>incidents</h4>
+          <p>Active and recent incident tracking. Integrates Slack, Datadog, Linear, and Notion. Best for <code>/handover</code> and <code>/rca</code>.</p>
+        </div>
+        <div class="ws-card">
+          <h4>aws-infra</h4>
+          <p>AWS cost and infrastructure monitoring. Pre-loaded with Cost Explorer queries and the cost spike automation.</p>
+        </div>
+        <div class="ws-card">
+          <h4>kubernetes</h4>
+          <p>Kubernetes cluster operations. Configured for pod health sweeps and the <code>/k8s</code> skill.</p>
+        </div>
+        <div class="ws-card">
+          <h4>blank</h4>
+          <p>Start from scratch. Add your own context to <code>agent.md</code> and pick which skills and integrations this workspace uses.</p>
+        </div>
+      </div>
+
+      <h3>Creating a custom template</h3>
+      <p>Save any workspace as a template from the workspace menu — <code>agent.md</code>, skill bindings, and integration config are all preserved.</p>
+
+      <h2>Thread management</h2>
+      <p>Each workspace supports multiple named threads. They share <code>agent.md</code> but have separate conversation histories — useful for keeping an active incident separate from routine morning checks.</p>
+
+      <h2>Sharing</h2>
+      <p>Generate a read-only share link from the workspace menu to hand off a briefing or handover doc to stakeholders without a wardn account. Links expire in 7 days and can be revoked anytime.</p>
+
+      <h2>Per-workspace integration config</h2>
+      <p>Each workspace can override Slack channels, Linear team, or Notion database — so <em>incidents</em> posts to a different channel than <em>aws-infra</em>. Configure in <strong>Workspace settings → Integrations</strong>.</p>
+    </section>
+
+    <!-- ════════════════════════════════════
+         AUTOMATIONS
+    ════════════════════════════════════ -->
+    <section class="docs-section" id="automations">
+      <h1>Automations</h1>
+      <p class="docs-lead">Automations run skills on a schedule or when a metric crosses a threshold — no manual trigger needed. Output posts to Slack, Notion, or wherever you configure.</p>
+
+      <h2>Trigger types</h2>
+      <h3>Cron schedule</h3>
+      <p>Standard cron syntax. Runs in the configured workspace's context with full access to its integrations.</p>
+      <pre><code># Run /morning in the incidents workspace every weekday at 07:00 UTC
+schedule: "0 7 * * 1-5"
+workspace: incidents
+skill: morning</code></pre>
+
+      <h3>Metric threshold</h3>
+      <p>wardn polls the integration every 5 minutes and fires the skill when the condition is met.</p>
+      <pre><code># Fire /cost when AWS daily spend is 25% above the 7-day average
+type: metric_threshold
+metric: aws.cost.daily_spend
+condition: percent_change_above
+threshold: 25
+workspace: aws-infra
+skill: cost</code></pre>
+
+      <h2>Built-in templates</h2>
+      <p>Automation templates for common workflows — use as-is or as a starting point:</p>
+      <div class="auto-grid">
+        <div class="auto-card">
+          <div class="auto-card-head">
+            <h4>Daily Morning Briefing</h4>
+            <span class="auto-badge cron">cron</span>
+          </div>
+          <p>Runs <code>/morning</code> every weekday and posts the output to your ops Slack channel.</p>
+          <span class="auto-cron">0 7 * * 1-5</span>
+        </div>
+        <div class="auto-card">
+          <div class="auto-card-head">
+            <h4>Cost Spike Alert</h4>
+            <span class="auto-badge thresh">threshold</span>
+          </div>
+          <p>Fires <code>/cost</code> when AWS spend exceeds 25% above the 7-day rolling average.</p>
+          <span class="auto-cron">aws.cost &gt; +25%</span>
+        </div>
+        <div class="auto-card">
+          <div class="auto-card-head">
+            <h4>Weekly Report</h4>
+            <span class="auto-badge cron">cron</span>
+          </div>
+          <p>Generates a week-in-review document every Monday and creates a Notion page.</p>
+          <span class="auto-cron">0 8 * * 1</span>
+        </div>
+        <div class="auto-card">
+          <div class="auto-card-head">
+            <h4>Custom skill, any trigger</h4>
+            <span class="auto-badge cron">cron</span>
+          </div>
+          <p>Point any automation at a custom skill from your <code>skills/</code> directory — built-in and custom skills are interchangeable.</p>
+          <span class="auto-cron">any schedule or threshold</span>
+        </div>
+      </div>
+
+      <h2>Creating automations</h2>
+      <p>Create automations in the console or edit <code>config.yaml</code> directly. Any skill — built-in or custom — works as the target.</p>
+      <pre><code># config.yaml
+automations:
+  - name: "My custom health check"
+    schedule: "*/15 * * * *"    # every 15 minutes
+    workspace: "incidents"
+    skill: "my-service-health"  # your custom skill slug
+    mode: "flash"</code></pre>
+
+      <h2>Execution history</h2>
+      <p>Every execution is logged with full output, duration, and any errors. View at <strong>Automations → History</strong>. Logs kept 90 days. Toggle automations on/off without deleting them.</p>
+
+      <div class="callout">
+        <b>Suggested automations:</b> wardn watches your manual skill usage and suggests automating repeating patterns — if you run <code>/handover</code> every morning, it'll offer to schedule it.
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════
+         CONFIGURATION
+    ════════════════════════════════════ -->
+    <!-- ════════════════════════════════════
+         AI PROVIDERS
+    ════════════════════════════════════ -->
+    <section class="docs-section" id="ai-providers">
+      <h1>AI providers</h1>
+      <p class="docs-lead">wardn works with any major AI provider. Ships with Anthropic Claude by default. Switch providers in <code>.env</code> or let users bring their own keys through the Settings UI.</p>
+
+      <h2 id="ai-cloud">Cloud API providers</h2>
+      <p>Set the key in <code>.env</code> and restart. <code>LLM_DEFAULT_MODEL</code> and <code>LLM_FLASH_MODEL</code> control which model runs by default.</p>
+
+      <table class="env-table">
+        <thead><tr><th>Provider</th><th>Env variable</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Anthropic</strong> (Claude)</td>
+            <td><code>ANTHROPIC_API_KEY</code></td>
+            <td>Default provider. Recommended for best results. Get a key at <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--accent)">console.anthropic.com</a>.</td>
+          </tr>
+          <tr>
+            <td><strong>OpenAI</strong> (GPT)</td>
+            <td><code>OPENAI_API_KEY</code></td>
+            <td>Supports GPT-5.4 and family. Get a key at <a href="https://platform.openai.com" target="_blank" rel="noopener" style="color:var(--accent)">platform.openai.com</a>.</td>
+          </tr>
+          <tr>
+            <td><strong>Google</strong> (Gemini)</td>
+            <td><code>GEMINI_API_KEY</code></td>
+            <td>Supports Gemini 3.x models. Get a key at <a href="https://aistudio.google.com" target="_blank" rel="noopener" style="color:var(--accent)">aistudio.google.com</a>.</td>
+          </tr>
+          <tr>
+            <td><strong>Groq</strong></td>
+            <td><code>GROQ_API_KEY</code></td>
+            <td>High-throughput inference. Useful for flash/subagent roles. <a href="https://console.groq.com" target="_blank" rel="noopener" style="color:var(--accent)">console.groq.com</a>.</td>
+          </tr>
+          <tr>
+            <td><strong>DeepSeek</strong></td>
+            <td><code>DEEPSEEK_API_KEY</code></td>
+            <td>DeepSeek V3.2 reasoning model. <a href="https://platform.deepseek.com" target="_blank" rel="noopener" style="color:var(--accent)">platform.deepseek.com</a>.</td>
+          </tr>
+          <tr>
+            <td><strong>OpenRouter</strong></td>
+            <td><code>OPENROUTER_API_KEY</code></td>
+            <td>Single key for 200+ models from multiple providers. Useful for testing or cost optimisation. <a href="https://openrouter.ai" target="_blank" rel="noopener" style="color:var(--accent)">openrouter.ai</a>.</td>
+          </tr>
+          <tr>
+            <td><strong>Cerebras</strong></td>
+            <td><code>CEREBRAS_API_KEY</code></td>
+            <td>Ultra-fast inference (~3000 tps) for latency-sensitive subagent workloads. <a href="https://cloud.cerebras.ai" target="_blank" rel="noopener" style="color:var(--accent)">cloud.cerebras.ai</a>.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Update <code>LLM_DEFAULT_MODEL</code> and <code>LLM_FLASH_MODEL</code>, then restart:</p>
+      <pre><code># Example: switch to OpenAI
+OPENAI_API_KEY=sk-...
+LLM_DEFAULT_MODEL=gpt-5.4-mini
+LLM_FLASH_MODEL=gpt-5.4-nano</code></pre>
+
+      <h2 id="ai-oauth">OAuth providers (no API key required)</h2>
+      <p>Connect in <strong>Settings → AI Provider → Connect account</strong>. No env vars needed — wardn stores a per-user OAuth token. Connected providers appear in the model picker automatically.</p>
+
+      <div class="int-grid" style="margin-top:14px;">
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#d97757;">Cl</div>
+            <h4>Claude (OAuth)</h4>
+          </div>
+          <p>Connect your Claude.ai account directly. Uses the same Claude models as the API but billed through your existing Claude subscription rather than API credits.</p>
+          <div style="font-size:12.5px; color:var(--text-3);">Requires Claude Max or Team plan.</div>
+        </div>
+        <div class="int-card">
+          <div class="int-card-head">
+            <div class="int-icon" style="background:#10a37f;">GP</div>
+            <h4>ChatGPT Codex (OAuth)</h4>
+          </div>
+          <p>Connect your ChatGPT account via the Codex API. Runs OpenAI models billed through your ChatGPT Plus or Pro subscription.</p>
+          <div style="font-size:12.5px; color:var(--text-3);">Requires ChatGPT Plus or Pro.</div>
+        </div>
+      </div>
+
+      <h2 id="ai-local">Local models (self-hosted)</h2>
+      <p>Run models locally — on the same machine or anywhere on your network. No API keys. wardn reaches your host via <code>host.docker.internal</code> automatically.</p>
+
+      <div class="callout" style="margin-bottom:20px;">
+        <b>Docker networking:</b> make sure Ollama or LM Studio is bound to <code>0.0.0.0</code>, not just <code>127.0.0.1</code> — otherwise wardn's containers can't reach it.
+      </div>
+
+      <table class="env-table">
+        <thead><tr><th>Provider</th><th>Default port</th><th>Setup</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Ollama</strong></td>
+            <td><code>11434</code></td>
+            <td>Install from <a href="https://ollama.com" target="_blank" rel="noopener" style="color:var(--accent)">ollama.com</a>, pull a model (<code>ollama pull llama3.3</code>), then select Ollama in Settings → AI Provider. No env var needed.</td>
+          </tr>
+          <tr>
+            <td><strong>LM Studio</strong></td>
+            <td><code>1234</code></td>
+            <td>Install from <a href="https://lmstudio.ai" target="_blank" rel="noopener" style="color:var(--accent)">lmstudio.ai</a>, load a model, enable the local server, then select LM Studio in Settings → AI Provider.</td>
+          </tr>
+          <tr>
+            <td><strong>vLLM</strong></td>
+            <td><code>8000</code></td>
+            <td>Start vLLM with <code>--host 0.0.0.0</code>. wardn will connect at <code>http://host.docker.internal:8000/v1</code>. Select vLLM in Settings → AI Provider.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Per-user API keys (BYOK)</h2>
+      <p>Users can enter their own provider key under <strong>Settings → AI Provider → Bring your own key</strong>. Encrypted at rest, used only for their requests — never overrides the system default. Useful when you want teams to own their own model costs.</p>
+
+    </section>
+
+    <section class="docs-section" id="configuration">
+      <h1>Configuration</h1>
+      <p class="docs-lead">Configuration lives in <code>.env</code> at the root of the installation. Changes need a container restart. Integration credentials can also be set or updated in the Settings UI without touching <code>.env</code>.</p>
+
+      <h2>LLM</h2>
+      <p style="font-size:13.5px;color:var(--text-2);margin-bottom:10px;">See <a href="#ai-providers" style="color:var(--accent);">AI providers</a> for full provider setup. These variables control which model is used at the system level.</p>
+      <table class="env-table">
+        <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>ANTHROPIC_API_KEY</td><td>Anthropic API key. Required when using any Claude model as the system default.</td></tr>
+          <tr><td>OPENAI_API_KEY</td><td>OpenAI API key. Required when using a GPT model as the system default.</td></tr>
+          <tr><td>GEMINI_API_KEY</td><td>Google AI Studio API key. Required when using a Gemini model.</td></tr>
+          <tr><td>LLM_DEFAULT_MODEL</td><td>Model used for the main (PTC) agent. Default: <code>claude-sonnet-4-6</code>.</td></tr>
+          <tr><td>LLM_FLASH_MODEL</td><td>Model used for fast (flash) agent and subagents. Default: <code>claude-haiku-4-5-20251001</code>.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Observability</h2>
+      <table class="env-table">
+        <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>DD_API_KEY</td><td>Datadog API key. Required for all Datadog integration features.</td></tr>
+          <tr><td>DD_APPLICATION_KEY</td><td>Datadog application key. Required alongside DD_API_KEY.</td></tr>
+          <tr><td>DD_SITE</td><td>Datadog site, e.g. <code>datadoghq.com</code> or <code>datadoghq.eu</code>. Default: <code>datadoghq.com</code>.</td></tr>
+          <tr><td>DD_MCP_TOOLSETS</td><td>Comma-separated Datadog MCP toolsets to enable. Default: <code>core,alerting</code>. Available: <code>core</code>, <code>alerting</code>, <code>apm</code>, <code>networks</code>.</td></tr>
+          <tr><td>GRAFANA_URL</td><td>Base URL of your Grafana instance, e.g. <code>https://grafana.internal</code>.</td></tr>
+          <tr><td>GRAFANA_ADMIN_PASSWORD</td><td>Grafana admin password for the bundled Grafana container.</td></tr>
+          <tr><td>GRAFANA_DEFAULT_DATASOURCE_UID</td><td>UID of the primary Grafana datasource (e.g. your Prometheus or Datadog datasource).</td></tr>
+          <tr><td>GRAFANA_OPENCOST_DATASOURCE_UID</td><td>UID of the OpenCost datasource in Grafana. Required for per-namespace Kubernetes cost data in <code>/cost</code>.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Cloud &amp; infrastructure</h2>
+      <table class="env-table">
+        <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>AWS_SSO_START_URL</td><td>IAM Identity Center start URL, e.g. <code>https://my-org.awsapps.com/start</code>.</td></tr>
+          <tr><td>AWS_SSO_REGION</td><td>Region where IAM Identity Center is configured, e.g. <code>us-east-1</code>.</td></tr>
+          <tr><td>AWS_SSO_ACCOUNT_ID</td><td>AWS account ID to access via SSO.</td></tr>
+          <tr><td>AWS_SSO_ROLE_NAME</td><td>IAM Identity Center permission set / role name to assume.</td></tr>
+          <tr><td>AWS_DEFAULT_REGION</td><td>Default AWS region for API calls, e.g. <code>us-east-1</code>.</td></tr>
+          <tr><td>KUBECONFIG_PATH</td><td>Absolute path to a kubeconfig file accessible from the wardn container. Mount it as a Docker volume.</td></tr>
+          <tr><td>ARGOCD_URL</td><td>Base URL of your ArgoCD instance, e.g. <code>https://argocd.internal</code>.</td></tr>
+          <tr><td>ARGOCD_TOKEN</td><td>ArgoCD API token with read access to applications and projects.</td></tr>
+          <tr><td>GITHUB_PAT</td><td>GitHub personal access token with <code>repo:read</code> scope. Used to correlate deployments with pull requests.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Comms &amp; ticketing</h2>
+      <table class="env-table">
+        <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>SLACK_BOT_TOKEN</td><td>Slack bot token (<code>xoxb-…</code>) with scopes: <code>channels:history</code>, <code>channels:read</code>, <code>search:read</code>, <code>chat:write</code>.</td></tr>
+          <tr><td>SLACK_SIGNING_SECRET</td><td>Slack app signing secret, used to verify inbound Slack events.</td></tr>
+          <tr><td>SLACK_INCIDENT_CHANNEL_IDS</td><td>Comma-separated Slack channel IDs to scope read access. wardn will not read any channel not in this list.</td></tr>
+          <tr><td>SLACK_HANDOVER_OUTPUT_CHANNEL_ID</td><td>Channel where automations and handover documents are posted.</td></tr>
+          <tr><td>LINEAR_API_KEY</td><td>Linear personal API key or OAuth token with read/write access to the relevant team.</td></tr>
+          <tr><td>NOTION_RUNBOOK_DATABASE_ID</td><td>Optional. Notion database ID for runbooks. Notion itself is connected via OAuth — authorize in Settings → Integrations.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>System</h2>
+      <table class="env-table">
+        <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>POSTGRES_PASSWORD<span class="req">required</span></td><td>Password for the PostgreSQL database that stores workspace memory, thread history, and automation logs.</td></tr>
+          <tr><td>SECRET_KEY<span class="req">required</span></td><td>Random secret used for HMAC state tokens and OAuth CSRF protection. Generate with: <code>openssl rand -hex 32</code>. Keep this secret and stable.</td></tr>
+          <tr><td>BYOK_ENCRYPTION_KEY<span class="req">required</span></td><td>A 32-character random string used to encrypt stored integration credentials at rest. Generate with: <code>openssl rand -hex 16</code>. Never change this after setup — it will invalidate all stored credentials.</td></tr>
+          <tr><td>REDIS_URL</td><td>Redis connection URL. Default: <code>redis://redis:6379/0</code> (bundled Redis container).</td></tr>
+          <tr><td>APP_PUBLIC_URL</td><td>Public URL of the wardn instance, e.g. <code>https://wardn.internal</code>. Used for OAuth redirect URLs and outbound links in Slack posts.</td></tr>
+          <tr><td>WORKSPACE_ARCHIVE_DAYS</td><td>Number of days of inactivity before a workspace is archived. Default: <code>90</code>.</td></tr>
+          <tr><td>HOST_IP</td><td>IP address of the Docker host, used to reach locally-hosted LLM providers. Defaults to <code>host.docker.internal</code> on Mac/Windows; set explicitly on Linux.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Web search</h2>
+      <table class="env-table">
+        <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>SERPER_API_KEY</td><td>Optional. Google search via Serper.dev. Enables web search in <code>ptc</code>-mode skills and the <code>/research</code> skill.</td></tr>
+          <tr><td>TAVILY_API_KEY</td><td>Optional. Tavily search API. Alternative to Serper; if both are set, Tavily is preferred.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-warn">
+        Never commit <code>.env</code> — it's in <code>.gitignore</code> by default. Rotate <code>BYOK_ENCRYPTION_KEY</code> only if you're also clearing and re-entering all stored credentials.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <a class="brand" href="index.html"><span class="logo">w</span> wardn</a>
+      <div class="foot-links">
+        <a href="console.html">Live demo</a>
+        <a href="index.html#selfhost">Self-hosted</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#integrations">Integrations</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="docs.html">Docs</a>
+        <a href="mailto:sales@wardn.run?subject=wardn%20sales%20enquiry">Contact sales</a>
+      </div>
+    </div>
+    <div class="copyr">Self-hosted operations intelligence · runs entirely in your environment</div>
+  </div>
+</footer>
+
+<script>
+// Nav shadow on scroll
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+// Active sidebar link highlighting using IntersectionObserver
+(function () {
+  const links = Array.from(document.querySelectorAll('.sidebar-link[href^="#"]'));
+  const linkMap = {};
+  links.forEach(link => {
+    const id = link.getAttribute('href').slice(1);
+    linkMap[id] = link;
+  });
+
+  const targets = Array.from(document.querySelectorAll(
+    '.docs-section, .docs-section h2[id]'
+  )).filter(el => el.id && linkMap[el.id]);
+
+  let activeId = null;
+
+  function setActive(id) {
+    if (id === activeId) return;
+    activeId = id;
+    links.forEach(l => l.classList.remove('active'));
+    if (id && linkMap[id]) {
+      linkMap[id].classList.add('active');
+      const sidebar = document.getElementById('sidebar');
+      const link = linkMap[id];
+      const sTop = sidebar.scrollTop;
+      const sBottom = sTop + sidebar.clientHeight;
+      const lTop = link.offsetTop;
+      const lBottom = lTop + link.offsetHeight;
+      if (lTop < sTop) sidebar.scrollTop = lTop - 16;
+      else if (lBottom > sBottom) sidebar.scrollTop = lBottom - sidebar.clientHeight + 16;
+    }
+  }
+
+  const visibleIds = new Set();
+  const orderedIds = targets.map(t => t.id);
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) visibleIds.add(entry.target.id);
+      else visibleIds.delete(entry.target.id);
+    });
+    const first = orderedIds.find(id => visibleIds.has(id));
+    setActive(first || null);
+  }, {
+    rootMargin: '-66px 0px -40% 0px',
+    threshold: 0
+  });
+
+  targets.forEach(t => observer.observe(t));
+  if (location.hash) setActive(location.hash.slice(1));
+})();
+</script>
+
+</body>
+</html>
