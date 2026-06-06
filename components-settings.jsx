@@ -14,6 +14,9 @@ const SETTINGS_NAV = [
     { id: 'workspaces',   label: 'Workspaces',   icon: 'grid' },
     { id: 'performance',  label: 'Performance',  icon: 'activity' },
   ]},
+  { group: 'Help', items: [
+    { id: 'docs', label: 'Documentation', icon: 'book' },
+  ]},
 ];
 
 function SettingsPage() {
@@ -65,6 +68,7 @@ function SettingsPage() {
         {section === 'models'       && <ModelsPanel/>}
         {section === 'skills'       && <SkillsPanel/>}
         {section === 'performance'  && <PerformancePanel/>}
+        {section === 'docs'         && <DocsPanel/>}
       </div>
     </div>
   );
@@ -897,6 +901,339 @@ function PerformancePanel() {
         </FormSection>
         <div className="form-actions">
           <button className="btn primary">Save</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Documentation ---------- */
+function DocsPanel() {
+  const SKILLS = [
+    { slug: '/morning', aliases: '/briefing', name: 'Morning Briefing', desc: 'Full overnight infrastructure sweep: service health across all integrations, cost deltas, open alerts, recent deployments, and recommended actions for the day.', tags: ['datadog', 'aws', 'k8s', 'slack'] },
+    { slug: '/cost', aliases: null, name: 'Cost Analysis', desc: 'Infrastructure spend breakdown by service and resource, with week-over-week trends, anomaly highlights, and root cause hypothesis for unexpected spikes.', tags: ['aws', 'datadog', 'k8s'] },
+    { slug: '/handover', aliases: null, name: 'Incident Handover', desc: 'Shift handover document with active alerts, recent deployments, open tickets, and first-30-minutes recommended actions. Auto-posts to Slack and creates a Notion page.', tags: ['slack', 'datadog', 'notion', 'linear'] },
+    { slug: '/investigate', aliases: null, name: 'Broad Investigation', desc: 'Cross-source sweep correlating alerts, deployment history, K8s events, and open tickets into a single change-correlation report with a root cause hypothesis.', tags: ['datadog', 'k8s', 'linear', 'argo'] },
+    { slug: '/k8s', aliases: '/pod [name]', name: 'Kubernetes Incident', desc: 'Systematic K8s diagnostics: pod status, events, recent logs, resource pressure, rollout history. Optionally creates a Notion runbook and Linear ticket.', tags: ['k8s', 'datadog', 'notion', 'linear'] },
+    { slug: '/rca', aliases: '/root-cause', name: 'Root Cause Analysis', desc: 'Post-incident 5-whys analysis reading Slack thread history and querying your monitoring tools for evidence. Creates a Notion post-mortem and Linear follow-up tickets.', tags: ['slack', 'datadog', 'k8s', 'notion'] },
+  ];
+
+  const AI_PROVIDERS = [
+    { name: 'Anthropic (Claude)', key: 'ANTHROPIC_API_KEY', note: 'Default. Claude Sonnet 4.6 recommended.' },
+    { name: 'OpenAI (GPT)', key: 'OPENAI_API_KEY', note: 'GPT-5.4 and family.' },
+    { name: 'Google (Gemini)', key: 'GEMINI_API_KEY', note: 'Gemini 3.x models.' },
+    { name: 'Groq', key: 'GROQ_API_KEY', note: 'High-throughput inference.' },
+    { name: 'DeepSeek', key: 'DEEPSEEK_API_KEY', note: 'DeepSeek V3.2 reasoning.' },
+    { name: 'OpenRouter', key: 'OPENROUTER_API_KEY', note: '200+ models via one key.' },
+    { name: 'Ollama', key: 'No key needed', note: 'Local. Port 11434 on host.' },
+    { name: 'LM Studio', key: 'No key needed', note: 'Local. Port 1234 on host.' },
+    { name: 'vLLM', key: 'No key needed', note: 'Local. Port 8000 on host.' },
+  ];
+
+  const SHORTCUTS = [
+    { keys: '⌘K', action: 'Search threads and workspaces' },
+    { keys: '⌘J', action: 'New thread in current workspace' },
+    { keys: '⌘/', action: 'Toggle sidebar' },
+    { keys: '⌘Enter', action: 'Send message' },
+    { keys: 'Esc', action: 'Cancel / close panel' },
+  ];
+
+  return (
+    <div className="settings-form">
+      {/* Skills quick reference */}
+      <div className="form-card">
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 16, fontWeight: 650, marginBottom: 4 }}>Skills quick reference</div>
+          <div style={{ fontSize: 13.5, color: 'var(--text-3)', lineHeight: 1.5 }}>
+            Invoke any skill with a slash command in the chat bar, or just describe what you need in plain language.
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', gap: 10 }}>
+          {SKILLS.map(sk => (
+            <div key={sk.slug} style={{
+              background: 'var(--bg)',
+              border: '1px solid var(--line)',
+              borderRadius: 10,
+              padding: '14px 16px',
+              opacity: sk.soon ? 0.65 : 1,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                <code style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 12,
+                  background: 'var(--accent-soft)',
+                  color: 'var(--accent)',
+                  padding: '2px 8px',
+                  borderRadius: 6,
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                }}>{sk.slug}</code>
+                {sk.aliases && (
+                  <code style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 11,
+                    color: 'var(--text-3)',
+                    background: 'var(--bg-sunken)',
+                    padding: '2px 6px',
+                    borderRadius: 5,
+                    whiteSpace: 'nowrap',
+                  }}>{sk.aliases}</code>
+                )}
+                {sk.soon && (
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    letterSpacing: '.06em',
+                    textTransform: 'uppercase',
+                    background: '#fff3e0',
+                    color: '#b46a16',
+                    border: '1px solid #f5c07a',
+                    borderRadius: 5,
+                    padding: '2px 7px',
+                  }}>Coming soon</span>
+                )}
+                <span style={{ fontSize: 13.5, fontWeight: 650, marginLeft: 'auto' }}>{sk.name}</span>
+              </div>
+              <p style={{ fontSize: 12.5, color: 'var(--text-2)', margin: '0 0 8px', lineHeight: 1.55 }}>{sk.desc}</p>
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                {sk.tags.map(t => (
+                  <span key={t} style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 10.5,
+                    background: 'var(--bg-sunken)',
+                    color: 'var(--text-4)',
+                    padding: '1px 6px',
+                    borderRadius: 4,
+                  }}>{t}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* AI providers */}
+      <div className="form-card">
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 16, fontWeight: 650, marginBottom: 4 }}>AI providers</div>
+          <div style={{ fontSize: 13.5, color: 'var(--text-3)', lineHeight: 1.5 }}>
+            Set the relevant API key in <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12, background: 'var(--bg-sunken)', padding: '1px 5px', borderRadius: 4 }}>.env</code> and restart, or enter your own key under <strong>Settings → AI Provider → Bring your own key</strong>.
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {AI_PROVIDERS.map((p, i) => (
+            <div key={p.name} style={{
+              display: 'grid',
+              gridTemplateColumns: '160px 1fr 1fr',
+              gap: 12,
+              alignItems: 'center',
+              padding: '9px 0',
+              borderBottom: i < AI_PROVIDERS.length - 1 ? '1px solid var(--line)' : 'none',
+            }}>
+              <span style={{ fontSize: 13.5, fontWeight: 600 }}>{p.name}</span>
+              <code style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 11.5,
+                color: p.key === 'No key needed' ? 'var(--ok)' : 'var(--text-2)',
+                background: 'var(--bg-sunken)',
+                padding: '2px 7px',
+                borderRadius: 5,
+                width: 'fit-content',
+              }}>{p.key}</code>
+              <span style={{ fontSize: 12.5, color: 'var(--text-3)' }}>{p.note}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{
+          marginTop: 14,
+          fontSize: 13,
+          color: 'var(--text-3)',
+          background: 'var(--accent-soft)',
+          borderRadius: 8,
+          padding: '10px 12px',
+          lineHeight: 1.5,
+        }}>
+          <strong style={{ color: 'var(--accent)' }}>OAuth options:</strong> Connect your Claude.ai or ChatGPT account directly under <strong>Settings → AI Provider</strong> — no API key required. Uses your existing subscription.
+        </div>
+      </div>
+
+      {/* Keyboard shortcuts */}
+      <div className="form-card">
+        <div style={{ fontSize: 15, fontWeight: 650, marginBottom: 14 }}>Keyboard shortcuts</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {SHORTCUTS.map((s, i) => (
+            <div key={s.keys} style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 16,
+              padding: '9px 0',
+              borderBottom: i < SHORTCUTS.length - 1 ? '1px solid var(--line)' : 'none',
+            }}>
+              <kbd style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: 12,
+                background: 'var(--bg-sunken)',
+                border: '1px solid var(--line-strong)',
+                borderRadius: 6,
+                padding: '3px 9px',
+                color: 'var(--text-2)',
+                minWidth: 72,
+                textAlign: 'center',
+                flexShrink: 0,
+              }}>{s.keys}</kbd>
+              <span style={{ fontSize: 13.5, color: 'var(--text-2)' }}>{s.action}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Build your own */}
+      <div className="form-card">
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 16, fontWeight: 650, marginBottom: 4 }}>Build your own skills</div>
+          <div style={{ fontSize: 13.5, color: 'var(--text-3)', lineHeight: 1.5 }}>
+            Skills are plain Markdown files. Drop a <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12, background: 'var(--bg-sunken)', padding: '1px 5px', borderRadius: 4 }}>SKILL.md</code> into <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12, background: 'var(--bg-sunken)', padding: '1px 5px', borderRadius: 4 }}>skills/my-skill/</code> in your wardn directory and it becomes available immediately.
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{
+            background: 'var(--bg-sunken)',
+            borderRadius: 10,
+            padding: '14px 16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+          }}>
+            {[
+              { label: 'Trigger phrase', desc: 'Slash command or plain language phrases that activate this skill' },
+              { label: 'Instructions', desc: 'Step-by-step instructions the agent follows, including which MCP tools to call' },
+              { label: 'Output format', desc: 'How to format the result — tables, markdown cards, Slack blocks, Notion pages, etc.' },
+              { label: 'Mode', desc: 'flash for quick responses, ptc for deep multi-step research with a Python sandbox' },
+            ].map(item => (
+              <div key={item.label} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                <div style={{
+                  fontSize: 11.5,
+                  fontWeight: 600,
+                  color: 'var(--accent)',
+                  background: 'var(--accent-soft)',
+                  padding: '2px 8px',
+                  borderRadius: 5,
+                  whiteSpace: 'nowrap',
+                  marginTop: 1,
+                  minWidth: 110,
+                  textAlign: 'center',
+                  flexShrink: 0,
+                }}>{item.label}</div>
+                <div style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.5 }}>{item.desc}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{
+            display: 'flex',
+            gap: 14,
+            alignItems: 'flex-start',
+            background: 'var(--bg)',
+            border: '1px solid var(--line)',
+            borderRadius: 10,
+            padding: '14px 16px',
+          }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13.5, fontWeight: 600, marginBottom: 4 }}>Import a community skill</div>
+              <div style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.5, marginBottom: 8 }}>
+                Any skill hosted as a Git repo or raw file can be imported with a single command:
+              </div>
+              <code style={{
+                display: 'block',
+                fontFamily: 'var(--font-mono)',
+                fontSize: 12,
+                background: 'var(--bg-sunken)',
+                padding: '10px 14px',
+                borderRadius: 7,
+                color: 'var(--text-2)',
+                lineHeight: 1.7,
+              }}>curl -o skills/my-skill/SKILL.md https://example.com/skills/my-skill.md</code>
+            </div>
+          </div>
+          <div style={{
+            display: 'flex',
+            gap: 14,
+            alignItems: 'flex-start',
+            background: 'var(--bg)',
+            border: '1px solid var(--line)',
+            borderRadius: 10,
+            padding: '14px 16px',
+          }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13.5, fontWeight: 600, marginBottom: 3 }}>Skills work with any MCP integration</div>
+              <div style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.5 }}>
+                Skills can call any MCP tool you've connected — your monitoring platform, ticketing system, cloud provider, databases, or a custom MCP server you build yourself.
+              </div>
+            </div>
+            <a href="https://wardn.run/docs#building-skills" target="_blank" rel="noopener noreferrer"
+               style={{ fontSize: 12.5, color: 'var(--accent)', fontWeight: 600, whiteSpace: 'nowrap', marginTop: 2, textDecoration: 'none' }}>
+              Skill guide →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Getting help */}
+      <div className="form-card">
+        <div style={{ fontSize: 15, fontWeight: 650, marginBottom: 14 }}>Getting help</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{
+            display: 'flex',
+            gap: 14,
+            alignItems: 'flex-start',
+            background: 'var(--accent-soft)',
+            borderRadius: 10,
+            padding: '14px 16px',
+          }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13.5, fontWeight: 600, marginBottom: 3 }}>Full documentation</div>
+              <div style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.5 }}>
+                Getting started guide, integration setup, skill authoring, and configuration reference.
+              </div>
+            </div>
+            <a href="https://wardn.run/docs" target="_blank" rel="noopener noreferrer"
+               style={{ fontSize: 12.5, color: 'var(--accent)', fontWeight: 600, whiteSpace: 'nowrap', marginTop: 2, textDecoration: 'none' }}>
+              wardn.run/docs →
+            </a>
+          </div>
+          <div style={{
+            display: 'flex',
+            gap: 14,
+            alignItems: 'flex-start',
+            background: 'var(--bg)',
+            border: '1px solid var(--line)',
+            borderRadius: 10,
+            padding: '14px 16px',
+          }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13.5, fontWeight: 600, marginBottom: 3 }}>Plain language works too</div>
+              <div style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.5 }}>
+                You don't need slash commands. Try: <em>"what happened overnight?"</em>, <em>"why did costs spike this week?"</em>, or <em>"generate a handover for the on-call team."</em>
+              </div>
+            </div>
+          </div>
+          <div style={{
+            display: 'flex',
+            gap: 14,
+            alignItems: 'center',
+            background: 'var(--bg)',
+            border: '1px solid var(--line)',
+            borderRadius: 10,
+            padding: '14px 16px',
+          }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13.5, fontWeight: 600, marginBottom: 3 }}>Support</div>
+              <div style={{ fontSize: 13, color: 'var(--text-2)' }}>
+                <a href="mailto:support@wardn.run" style={{ color: 'var(--accent)' }}>support@wardn.run</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
