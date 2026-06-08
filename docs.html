@@ -276,7 +276,7 @@ footer{border-top:1px solid var(--line); padding:40px 0;}
     ════════════════════════════════════ -->
     <section class="docs-section" id="getting-started">
       <h1>Getting started</h1>
-      <p class="docs-lead">wardn runs entirely in your environment — no data leaves your network. You'll be up in under ten minutes.</p>
+      <p class="docs-lead">wardn runs entirely in your environment — no data leaves your network. Every integration is read-only by default, scoped to exactly what you grant, and you're in full control of what the agent can touch. Up in under ten minutes.</p>
 
       <h2 id="prerequisites">Prerequisites</h2>
       <p>You need the following on the host machine:</p>
@@ -780,7 +780,7 @@ flash  <span class="cm"># or: ptc (for deep research with code execution)</span>
     ════════════════════════════════════ -->
     <section class="docs-section" id="integrations">
       <h1>Integrations</h1>
-      <p class="docs-lead">Add credentials in <strong>Settings → Integrations</strong> — no restart required. Everything is encrypted at rest.</p>
+      <p class="docs-lead">Every integration is read-only by default. You control exactly which tools are connected, which workspaces can access them, and whether the agent is ever allowed to take a write action. Credentials are added in <strong>Settings → Integrations</strong>, encrypted at rest, and never leave your environment.</p>
 
       <div class="int-grid">
 
@@ -817,7 +817,7 @@ flash  <span class="cm"># or: ptc (for deep research with code execution)</span>
             <div class="int-icon" style="background:#326ce5;">K8s</div>
             <h4>Kubernetes</h4>
           </div>
-          <p>Pod status, logs, events, deployments, and resource metrics. Runs in read-only mode by default; write actions require explicit approval via the plan-mode interrupt.</p>
+          <p>Pod status, logs, events, deployments, and resource metrics. Read-only by default — the agent cannot restart, delete, or modify anything unless you explicitly enable write access and approve each action through the confirmation prompt.</p>
           <div class="int-creds">
             <span class="int-cred">KUBECONFIG_PATH</span>
           </div>
@@ -828,7 +828,7 @@ flash  <span class="cm"># or: ptc (for deep research with code execution)</span>
             <div class="int-icon" style="background:#4a154b;">SL</div>
             <h4>Slack</h4>
           </div>
-          <p>Read incident channel history, search messages, and post handover documents and briefings. Scoped to specific channel IDs — never the full workspace.</p>
+          <p>Read incident channel history, search messages, and post handover documents. You specify exactly which channel IDs wardn can read — it has no access to the rest of your Slack workspace.</p>
           <div class="int-creds">
             <span class="int-cred">SLACK_BOT_TOKEN</span>
             <span class="int-cred">SLACK_SIGNING_SECRET</span>
@@ -900,6 +900,10 @@ flash  <span class="cm"># or: ptc (for deep research with code execution)</span>
       </div>
 
       <div class="callout" style="margin-top:24px;">
+        <b>Granular access per workspace.</b> Each workspace only has access to the integrations you explicitly assign to it. A workspace scoped to cost analysis has no access to your Kubernetes cluster. One scoped to incidents can post to its own Slack channel, not yours. You decide the blast radius of every workspace at creation time — and can change it at any time from Workspace settings → Integrations.
+      </div>
+
+      <div class="callout" style="margin-top:12px;">
         <b>Custom MCP servers:</b> Any MCP-compatible tool can be added under <strong>Settings → Integrations → Add server</strong>. Skills reference integrations by name, so custom ones work immediately alongside built-ins.
       </div>
     </section>
@@ -909,7 +913,7 @@ flash  <span class="cm"># or: ptc (for deep research with code execution)</span>
     ════════════════════════════════════ -->
     <section class="docs-section" id="workspaces">
       <h1>Workspaces</h1>
-      <p class="docs-lead">A workspace is a scoped context for the agent — its own <code>agent.md</code> memory, chat history, and integration config. The longer you use a workspace, the more context it accumulates about your environment.</p>
+      <p class="docs-lead">A workspace is a scoped context for the agent — its own <code>agent.md</code> memory, chat history, and a specific set of integrations you control. Each workspace can only see and act on what you've explicitly given it access to. Nothing bleeds across workspace boundaries.</p>
 
       <h2>What workspaces store</h2>
       <p>The agent writes to <code>agent.md</code> during every session, building up:</p>
